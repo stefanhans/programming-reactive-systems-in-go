@@ -1,0 +1,8 @@
+memberlistconfigure
+memberlistcreate
+bootstrapjoin
+memberliststart
+memberlistjoin
+chatstart
+sleep 1
+chatmembers

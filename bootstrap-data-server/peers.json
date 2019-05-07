@@ -1,0 +1,24 @@
+{
+  "Config": {
+    "maxpeers": 2,
+    "minrefillcandidates": 2,
+    "numpeers": 2
+  },
+  "Peers": {
+    "3a4508ce-aa42-4c98-a613-30d37f40aa84": {
+      "id": "3a4508ce-aa42-4c98-a613-30d37f40aa84",
+      "name": "alice",
+      "ip": "127.0.0.1",
+      "port": "22365",
+      "protocol": "tcp",
+      "status": "0"
+    },
+    "8018d923-f02b-416f-a929-ab44eb52ad78": {
+      "id": "8018d923-f02b-416f-a929-ab44eb52ad78",
+      "name": "bob",
+      "ip": "127.0.0.2",
+      "port": "22366",
+      "protocol": "tcp"
+    }
+  }
+}
