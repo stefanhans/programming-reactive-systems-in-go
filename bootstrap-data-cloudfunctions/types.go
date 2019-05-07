@@ -1,9 +1,9 @@
 package bootstrap_data_cloudfunctions
 
 var (
-	collectionName string = "Peers"
-	documentName   string = "Chat"
-	topic          string = "Developer"
+	collectionName = "Peers"
+	documentName   = "Chat"
+	topic          = "Developer"
 )
 
 // Peer is the struct for the collection

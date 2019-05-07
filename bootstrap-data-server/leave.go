@@ -49,15 +49,21 @@ func Leave(w http.ResponseWriter, r *http.Request) {
 
 	// Save JSON to file
 	mtx.Lock()
-	ioutil.WriteFile(collectionFileName, append(bootstrapDataJson, byte('\n')), 0600)
+	err = ioutil.WriteFile(collectionFileName, append(bootstrapDataJson, byte('\n')), 0600)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write bootstrap data for %q: %v", collectionFileName, err),
+			http.StatusInternalServerError)
+		return
+	}
 	mtx.Unlock()
 
-	// Marshall config and return it as response
-	fmt.Fprintf(w, "%v", string(bootstrapDataJson))
+	// Send JSON as response
+	_, err = fmt.Fprintf(w, "%v", string(bootstrapDataJson))
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write response: %s", err), http.StatusInternalServerError)
+	}
 }
 
 /*
-
 curl -d "uuid1" http://localhost:8080/leave
-
 */

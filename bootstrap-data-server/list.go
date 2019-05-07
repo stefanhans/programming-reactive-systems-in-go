@@ -24,7 +24,5 @@ func List(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-
 curl http://localhost:8080/list
-
 */

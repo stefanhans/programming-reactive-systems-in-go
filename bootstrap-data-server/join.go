@@ -99,11 +99,9 @@ func Join(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-
 curl -d "uuid1 memberlist 127.0.0.1 22365 tcp 0 0" http://localhost:8080/join
 curl -d "uuid2 memberlist 127.0.0.1 22365 tcp 0 0" http://localhost:8080/join
 curl -d "uuid3 memberlist 127.0.0.1 22365 tcp 0 0" http://localhost:8080/join
 curl -d "uuid4 memberlist 127.0.0.1 22365 tcp 0 0" http://localhost:8080/join
 curl -d "uuid5 memberlist 127.0.0.1 22365 tcp 0 0" http://localhost:8080/join
-
 */

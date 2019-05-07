@@ -28,16 +28,22 @@ func Reset(w http.ResponseWriter, r *http.Request) {
 
 	// Save JSON to file
 	mtx.Lock()
-	ioutil.WriteFile(collectionFileName, append(bootstrapPeersJson, byte('\n')), 0600)
+	err = ioutil.WriteFile(collectionFileName, append(bootstrapPeersJson, byte('\n')), 0600)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write bootstrap data for %q: %v", collectionFileName, err),
+			http.StatusInternalServerError)
+		return
+	}
 	mtx.Unlock()
 
 	// Send JSON as response
-	fmt.Fprintf(w, "%v", string(bootstrapPeersJson))
+	_, err = fmt.Fprintf(w, "%v", string(bootstrapPeersJson))
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write response: %s", err), http.StatusInternalServerError)
+	}
 
 }
 
 /*
-
 curl http://localhost:8080/reset
-
 */

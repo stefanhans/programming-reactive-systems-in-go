@@ -1,7 +1,7 @@
 package main
 
 // File for the collection
-var collectionFileName string = "peers.json"
+var collectionFileName = "peers.json"
 
 // Peer is the struct for the collection
 type Peer struct {
@@ -10,7 +10,7 @@ type Peer struct {
 	Ip       string `json:"ip,omitempty"`
 	Port     string `json:"port,omitempty"`
 	Protocol string `json:"protocol,omitempty"` // "tcp" or "udp"
-	// todo get rid of unused field status
+	// Todo get rid of unused field status
 	Status    string `json:"status,omitempty"`
 	Timestamp string `json:"timestamp,omitempty"` // Unix time in seconds
 }

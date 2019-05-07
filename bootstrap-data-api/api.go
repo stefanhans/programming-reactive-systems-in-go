@@ -100,7 +100,7 @@ func (api *BootstrapDataAPI) Join() *BootstrapData {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		fmt.Printf("failed to read response of bootstrap-peers join (%v): %v\n", api.Self, err)
 		return nil
@@ -110,7 +110,7 @@ func (api *BootstrapDataAPI) Join() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
@@ -131,7 +131,7 @@ func (api *BootstrapDataAPI) Leave(id string) *BootstrapData {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		fmt.Printf("failed to read response of bootstrap-peers leave (%s): %v\n", id, err)
 		return nil
@@ -141,7 +141,7 @@ func (api *BootstrapDataAPI) Leave(id string) *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
@@ -163,7 +163,7 @@ func (api *BootstrapDataAPI) Refill() *BootstrapData {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		fmt.Printf("failed to read response of bootstrap-peers refill (%v): %v\n", api.Self, err)
 		return nil
@@ -173,7 +173,7 @@ func (api *BootstrapDataAPI) Refill() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
 		return nil
 	}
 	return &bootstrapData
@@ -193,7 +193,7 @@ func (api *BootstrapDataAPI) List() *BootstrapData {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		fmt.Printf("failed to read response of bootstrap-peers list: %v\n", err)
 		return nil
@@ -203,7 +203,7 @@ func (api *BootstrapDataAPI) List() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
@@ -224,7 +224,7 @@ func (api *BootstrapDataAPI) Reset() *BootstrapData {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		fmt.Printf("failed to read response of bootstrap-peers list: %v\n", err)
 		return nil
@@ -234,7 +234,7 @@ func (api *BootstrapDataAPI) Reset() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers Reset (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers Reset (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
@@ -256,7 +256,7 @@ func (api *BootstrapDataAPI) UpdateConfig() (*BootstrapData, error) {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response of bootstrap data update config: %v", err)
 	}

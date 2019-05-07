@@ -86,7 +86,5 @@ func ConfigUpdate(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-
 curl -d "3 1" http://localhost:8080/config
-
 */
