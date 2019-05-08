@@ -68,7 +68,7 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 				currentTestEvaluation.Status = "FAILED"
 				for _, eventFilter := range currentTestEventFilters {
 
-					fmt.Printf("\nXXX\n eventFilter: %s\n\n", eventFilter)
+					fmt.Printf("\nXXX\n eventFilter: %v\n\n", eventFilter)
 
 					fmt.Printf("NumExpectedEvents %d == NumReceivedEvents %d\n",
 						eventFilter.NumExpectedEvents, eventFilter.NumReceivedEvents)
