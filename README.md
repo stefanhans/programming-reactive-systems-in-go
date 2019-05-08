@@ -1,8 +1,7 @@
 # Programming Reactive Systems in Go
 
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/stefanhans/golang-contexting/blob/master/LICENSE)
-[![GoDoc](https://godoc.org/github.com/stefanhans/golang-contexting/ctx?status.svg)](https://godoc.org/github.com/stefanhans/golang-contexting/ctx)
-[![Go Report Card](https://goreportcard.com/badge/github.com/stefanhans/golang-contexting)](https://goreportcard.com/report/github.com/stefanhans/golang-contexting)
+[![Go Report Card](https://goreportcard.com/badge/github.com/stefanhans/programming-reactive-systems-in-go)](https://goreportcard.com/report/github.com/stefanhans/programming-reactive-systems-in-go)
 
 
 
