@@ -76,8 +76,7 @@ func cmdLogging(arguments []string) {
 			prompt), "\n"))
 		tmpDebugfile, err = startLogging(arguments[1])
 		if err != nil {
-			displayText(strings.Trim(fmt.Sprintf("Error: startLogging: %v\n%s", err,
-				prompt), "\n"))
+			displayError("could not start logging", err)
 		} else {
 			displayText(strings.Trim(fmt.Sprintf("Start logging by command to %q\n%s", arguments[1],
 				prompt), "\n"))
@@ -90,16 +89,12 @@ func cmdLogging(arguments []string) {
 		log.Printf("Stop logging by command")
 		_ = tmpDebugfile.Close()
 
-		// Start debugging to file, if switched on or filename specified
-		if *debug || len(*debugfilename) > 0 {
-
-			_, err := startLogging(*debugfilename)
-			if err != nil {
-				displayText(strings.Trim(fmt.Sprintf("could not start logging: %v\n%s", err,
-					prompt), "\n"))
-				return
-			}
-			log.Printf("Switch from logging by command to %q\n", debugfilename)
+		// Start logging to file
+		_, err := startLogging(*logfile)
+		if err != nil {
+			displayError("could not start logging", err)
+			return
 		}
+		log.Printf("Switch from logging by command to %q\n", logfile)
 	}
 }

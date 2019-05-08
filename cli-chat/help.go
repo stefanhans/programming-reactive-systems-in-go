@@ -20,9 +20,9 @@ var (
 	groupKeys        []string
 	groupCommandKeys = make(map[string][]string)
 
-	mainHelp *help = &help{
+	mainHelp = &help{
 		name:  "help",
-		usage: "help [ groups | <group> | <command> ]",
+		usage: "/help [ groups [<group>] | <command> ]",
 		description: "help shows: \n" +
 			"- this help text (/help)\n" +
 			"- all groups of commands (/help groups)\n" +
@@ -32,278 +32,302 @@ var (
 			"bootstrapjoin": {
 				name:        "bootstrapjoin",
 				group:       "bootstrap",
-				usage:       "bootstrapjoin",
+				usage:       "/bootstrapjoin",
 				description: "bootstrapjoin joins calling peer to bootstrap peers",
 			},
 			"bootstrapleave": {
 				name:        "bootstrapleave",
 				group:       "bootstrap",
-				usage:       "bootstrapleave",
+				usage:       "/bootstrapleave",
 				description: "bootstrapleave leaves calling peer from bootstrap peers",
 			},
 			"bootstraprefill": {
 				name:        "bootstraprefill",
 				group:       "bootstrap",
-				usage:       "bootstraprefill",
+				usage:       "/bootstraprefill",
 				description: "bootstraprefill refills bootstrap peers with calling peer",
 			},
 			"bootstrap": {
 				name:        "bootstrap",
 				group:       "bootstrap",
-				usage:       "bootstrap",
+				usage:       "/bootstrap",
 				description: "bootstrap shows bootstrap data from remote",
 			},
 			"bootstrapconfig": {
 				name:        "bootstrapconfig",
 				group:       "bootstrap",
-				usage:       "bootstrapconfig",
+				usage:       "/bootstrapconfig",
 				description: "bootstrapconfig shows bootstrap configuration from remote",
 			},
 			"bootstrappeers": {
 				name:        "bootstrappeers",
 				group:       "bootstrap",
-				usage:       "bootstrappeers",
+				usage:       "/bootstrappeers",
 				description: "bootstrappeers lists bootstrap peers from remote",
 			},
 			"bootstrapreset": {
 				name:        "bootstrapreset",
 				group:       "bootstrap",
-				usage:       "bootstrapreset",
+				usage:       "/bootstrapreset",
 				description: "bootstrapreset resets the bootstrap peers at remote",
 			},
 			"bootstraplistlocal": {
 				name:        "bootstraplistlocal",
 				group:       "bootstrap",
-				usage:       "bootstraplistlocal",
+				usage:       "/bootstraplistlocal",
 				description: "bootstraplistlocal lists bootstrap peers from local map",
 			},
 			"memberlistconfigure": {
 				name:        "memberlistconfigure",
 				group:       "memberlist",
-				usage:       "memberlistconfigure",
+				usage:       "/memberlistconfigure",
 				description: "memberlistconfigure creates a default memberlist configuration",
 			},
 			"showconfig": {
 				name:        "showconfig",
 				group:       "memberlist",
-				usage:       "showconfig",
+				usage:       "/showconfig",
 				description: "showconfig shows the memberlist configuration",
 			},
 			"saveconfig": {
 				name:        "saveconfig",
 				group:       "memberlist",
-				usage:       "saveconfig [file]",
+				usage:       "/saveconfig [file]",
 				description: "saveconfig saves the memberlist configuration as JSON file",
 			},
 			"loadconfig": {
 				name:        "loadconfig",
 				group:       "memberlist",
-				usage:       "loadconfig file",
+				usage:       "/loadconfig file",
 				description: "loadconfig loads the memberlist configuration from JSON file",
 			},
 			"memberlistcreate": {
 				name:        "memberlistcreate",
 				group:       "memberlist",
-				usage:       "memberlistcreate",
+				usage:       "/memberlistcreate",
 				description: "memberlistcreate creates the memberlist specified by the configuration",
 			},
 			"showmemberlist": {
 				name:        "showmemberlist",
 				group:       "memberlist",
-				usage:       "showmemberlist",
+				usage:       "/showmemberlist",
 				description: "showmemberlist shows the memberlist",
 			},
 			"localnode": {
 				name:        "localnode",
 				group:       "memberlist",
-				usage:       "localnode",
+				usage:       "/localnode",
 				description: "localnode shows the local node's name and address",
 			},
 			"memberlist": {
 				name:        "memberlist",
 				group:       "memberlist",
-				usage:       "memberlist",
+				usage:       "/memberlist",
 				description: "memberlist lists all members",
 			},
 			"memberlistjoin": {
 				name:        "memberlistjoin",
 				group:       "memberlist",
-				usage:       "memberlistjoin",
+				usage:       "/memberlistjoin",
 				description: "memberlistjoin joins to memberlist",
 			},
 			"memberlistleave": {
 				name:        "memberlistleave",
 				group:       "memberlist",
-				usage:       "memberlistleave [<timeout in seconds, default: 1 sec>]",
+				usage:       "/memberlistleave [<timeout in seconds, default: 1 sec>]",
 				description: "memberlistleave broadcasts leave message until finished or timeout is reached",
 			},
 			"memberlistupdate": {
 				name:        "memberlistupdate",
 				group:       "memberlist",
-				usage:       "[<timeout in seconds, default: 1 sec>]",
+				usage:       "/memberlistupdate [<timeout in seconds, default: 1 sec>]",
 				description: "memberlistupdate broadcasts re-advertising the local node message until finished or timeout is reached",
 			},
 			"memberliststart": {
 				name:        "memberliststart",
 				group:       "memberlist",
-				usage:       "memberliststart",
+				usage:       "/memberliststart",
 				description: "memberliststart starts broadcasting to the members",
 			},
 			"memberlistshutdown": {
 				name:        "memberlistshutdown",
 				group:       "memberlist",
-				usage:       "memberlistshutdown",
+				usage:       "/memberlistshutdown",
 				description: "memberlistshutdown stops broadcasting to the members",
 			},
 			"memberlistshutdowntransport": {
 				name:        "memberlistshutdowntransport",
 				group:       "memberlist",
-				usage:       "memberlistshutdowntransport",
-				description: "memberlistshutdowntransport \n\t memberlistshutdowntransport stops broadcasting transport to the members",
+				usage:       "/memberlistshutdowntransport",
+				description: "memberlistshutdowntransport stops broadcasting transport to the members",
 			},
 			"memberlisthealthscore": {
 				name:        "memberlisthealthscore",
 				group:       "memberlist",
-				usage:       "memberlisthealthscore",
+				usage:       "/memberlisthealthscore",
 				description: "memberlisthealthscore shows the health score >= 0, lower numbers are better",
 			},
 			"memberlistdelete": {
 				name:        "memberlistdelete",
 				group:       "memberlist",
-				usage:       "memberlistdelete",
+				usage:       "/memberlistdelete",
 				description: "memberlistdelete sets memberlist = nil",
 			},
 			"chatstart": {
 				name:        "chatstart",
 				group:       "chat",
-				usage:       "chatstart",
+				usage:       "/chatstart",
 				description: "chatstart starts chat listener and broadcasts the new chat member",
 			},
 			"chatleave": {
 				name:        "chatleave",
 				group:       "chat",
-				usage:       "chatleave",
+				usage:       "/chatleave",
 				description: "chatleave broadcasts deletion of this chat member",
 			},
 			"chatping": {
 				name:        "chatping",
 				group:       "chat",
-				usage:       "chatping",
+				usage:       "/chatping",
 				description: "chatping pings a member of the chat via memberlist",
 			},
 			"chatmembers": {
 				name:        "chatmembers",
 				group:       "chat",
-				usage:       "chatmembers <chatmember>",
+				usage:       "/chatmembers <chatmember>",
 				description: "chatmembers lists all chat members",
 			},
 			"chatmemberping": {
 				name:        "chatmemberping",
 				group:       "chat",
-				usage:       "chatmemberping <member id>",
+				usage:       "/chatmemberping <member id>",
 				description: "chatmemberping pings a chat member",
 			},
 			"chatstop": {
 				name:        "chatstop",
 				group:       "chat",
-				usage:       "chatstop",
+				usage:       "/chatstop",
 				description: "chatstop stops the chat listener",
 			},
 			"msg": {
 				name:        "msg",
 				group:       "chat",
-				usage:       "msg <string>",
+				usage:       "/msg <string>",
 				description: "msg sends the rest of the line as message to all other members",
 			},
 			"broadcastadd": {
 				name:        "broadcastadd",
 				group:       "broadcast",
-				usage:       "broadcastadd <key> <message>",
+				usage:       "/broadcastadd <key> <message>",
 				description: "broadcastadd updates a key/message at all members",
 			},
 			"broadcastdel": {
 				name:        "broadcastdel",
 				group:       "broadcast",
-				usage:       "broadcastdel <key>",
+				usage:       "/broadcastdel <key>",
 				description: "broadcastdel deletes a key at all members",
 			},
 			"broadcastlist": {
 				name:        "broadcastlist",
 				group:       "broadcast",
-				usage:       "broadcastlist",
+				usage:       "/broadcastlist",
 				description: "broadcastlist lists all local key/value pairs",
 			},
 			"execute": {
 				name:        "execute",
 				group:       "script",
-				usage:       "execute file",
+				usage:       "/execute file",
 				description: "execute executes the commands in the file line by line; '#' is a comment line",
 			},
 			"sleep": {
 				name:        "sleep",
 				group:       "script",
-				usage:       "sleep <seconds>",
+				usage:       "/sleep <seconds>",
 				description: "sleep sleeps for seconds",
 			},
 			"echo": {
 				name:        "echo",
 				group:       "script",
-				usage:       "echo <string>",
+				usage:       "/echo <string>",
 				description: "echo prints rest of line",
 			},
 			"lock": {
 				name:        "lock",
 				group:       "script",
-				usage:       "lock <name>...",
+				usage:       "/lock <name>...",
 				description: "lock creates a <name>.wait lockfile",
 			},
 			"unlock": {
 				name:        "unlock",
 				group:       "script",
-				usage:       "unlock <name>...",
+				usage:       "/unlock <name>...",
 				description: "unlock removes a <name>.wait lockfile",
 			},
 			"wait": {
 				name:        "wait",
 				group:       "script",
-				usage:       "wait",
+				usage:       "/wait",
 				description: "wait until a <name>.wait lockfile is gone",
 			},
 			"shell": {
 				name:        "shell",
 				group:       "script",
-				usage:       "shell <script>",
+				usage:       "/shell <script>",
 				description: "shell executes the shell script",
 			},
 			"log": {
 				name:        "log",
 				group:       "cli",
-				usage:       "log (on <filename> | off)",
+				usage:       "/log (on <filename> | off)",
 				description: "log starts or stops writing logging output in the specified file",
 			},
 			"exit": {
 				name:        "exit",
 				group:       "cli",
-				usage:       "exit",
+				usage:       "/exit",
 				description: "exit exits the application directly",
 			},
 			"play": {
 				name:        "play",
 				group:       "development",
-				usage:       "play [...]",
+				usage:       "/play [...]",
 				description: "play is for developer to play",
 			},
 			"init": {
 				name:        "init",
 				group:       "development",
-				usage:       "init",
+				usage:       "/init",
 				description: "init simulates the init process of the application",
 			},
 			"quit": {
 				name:        "quit",
 				group:       "development",
-				usage:       "quit",
+				usage:       "/quit",
 				description: "quit simulates the exit process of the application",
+			},
+			"testfilter": {
+				name:        "testfilter",
+				group:       "test",
+				usage:       "/testfilter messagesView <expected events> <expected text>",
+				description: "testfilter adds an event filter to the messages view of the chat",
+			},
+			"testlocalfilters": {
+				name:        "testlocalfilters",
+				group:       "test",
+				usage:       "/testlocalfilters",
+				description: "testlocalfilters shows the local event filters",
+			},
+			"testevents": {
+				name:        "testevents",
+				group:       "test",
+				usage:       "/testevents",
+				description: "testevents shows all events",
+			},
+			"testsummary": {
+				name:        "testsummary",
+				group:       "test",
+				usage:       "/testsummary",
+				description: "testsummary shows test summary",
 			},
 		},
 	}
@@ -352,21 +376,25 @@ func showHelp(arguments []string) {
 	switch len(arguments) {
 	case 0:
 		displayHelp(mainHelp)
+		break
 	case 1:
 		displayHelp(mainHelp, arguments[0])
+		break
 	case 2:
 		displayHelp(mainHelp, arguments[0], arguments[1])
+		break
 	}
 }
 
-func displayHelp(help *help, cmd ...string) error {
+func displayHelp(help *help, cmd ...string) {
 
 	log.Printf("displayHelp: %v\n", cmd)
 
 	// Shows main help
 	if len(cmd) == 0 {
-		return displayText(strings.Trim(fmt.Sprintf("Usage: %s\nDescription: %s\n%s", help.usage, help.description,
+		displayText(strings.Trim(fmt.Sprintf("Usage: %s\nDescription: %s\n%s", help.usage, help.description,
 			prompt), "\n"))
+		return
 	}
 
 	// commands related?
@@ -378,7 +406,8 @@ func displayHelp(help *help, cmd ...string) error {
 		for _, k := range commandKeys {
 			helpCommands += fmt.Sprintf("%v ", k)
 		}
-		return displayText(strings.Trim(fmt.Sprintf("%s\n%s", helpCommands, prompt), "\n"))
+		displayText(strings.Trim(fmt.Sprintf("%s\n%s", helpCommands, prompt), "\n"))
+		return
 	}
 
 	// groups related?
@@ -391,7 +420,8 @@ func displayHelp(help *help, cmd ...string) error {
 			for _, k := range groupKeys {
 				helpGroups += fmt.Sprintf("%v ", k)
 			}
-			return displayText(strings.Trim(fmt.Sprintf("%s\n%s", helpGroups, prompt), "\n"))
+			displayText(strings.Trim(fmt.Sprintf("%s\n%s", helpGroups, prompt), "\n"))
+			return
 		}
 
 		// Shows commands for a group
@@ -401,14 +431,21 @@ func displayHelp(help *help, cmd ...string) error {
 
 			groupCommands += fmt.Sprintf("%v ", command)
 		}
-		return displayText(strings.Trim(fmt.Sprintf("%s\n%s", groupCommands, prompt), "\n"))
+		if groupCommands == "" {
+			displayError(fmt.Sprintf("%q is not a known group", cmd[0]))
+			return
+		}
+		displayText(strings.Trim(fmt.Sprintf("%s\n%s", groupCommands, prompt), "\n"))
+		return
 	}
 
 	// Shows help for command
 	if commandHelp, ok := help.commands[cmd[0]]; ok {
-		return displayText(strings.Trim(fmt.Sprintf("Usage: %s\nDescription: %s\n%s", commandHelp.usage, commandHelp.description,
+		displayText(strings.Trim(fmt.Sprintf("Usage: %s\nDescription: %s\n%s", commandHelp.usage, commandHelp.description,
 			prompt), "\n"))
+		return
 	}
-	return displayError(fmt.Sprintf("%q is not a known command", cmd[0]))
+	displayError(fmt.Sprintf("%q is not a known command", cmd[0]))
+	return
 
 }

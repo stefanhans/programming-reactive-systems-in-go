@@ -16,9 +16,6 @@ import (
 	"github.com/stefanhans/programming-reactive-systems-in-go/cli-chat/chat-member"
 )
 
-// Todo: Replace command switch by map
-//var cliCommands map[string]func([]string) bool
-
 // Execute a command specified by the argument string
 func executeCommand(commandline string) bool {
 
@@ -32,24 +29,20 @@ func executeCommand(commandline string) bool {
 		switch commandFields[0] {
 
 		case "memberlistconfigure":
-			configureMemberlist(commandFields[1:])
-			return true
+			return configureMemberlist(commandFields[1:])
 
 		case "showconfig":
 			showMemberlistConfiguration(commandFields[1:])
 			return true
 
 		case "saveconfig":
-			saveMemberlistConfiguration(commandFields[1:])
-			return true
+			return saveMemberlistConfiguration(commandFields[1:])
 
 		case "loadconfig":
-			loadMemberlistConfiguration(commandFields[1:])
-			return true
+			return loadMemberlistConfiguration(commandFields[1:])
 
 		case "memberlistcreate":
-			createMemberlist(commandFields[1:])
-			return true
+			return createMemberlist(commandFields[1:])
 
 		case "showmemberlist":
 			showMemberlist(commandFields[1:])
@@ -60,36 +53,28 @@ func executeCommand(commandline string) bool {
 			return true
 
 		case "memberlist":
-			listMembers(commandFields[1:])
-			return true
+			return listMembers(commandFields[1:])
 
 		case "memberlistjoin":
-			joinMemberlist(commandFields[1:])
-			return true
+			return joinMemberlist(commandFields[1:])
 
 		case "memberlistleave":
-			leaveMemberlist(commandFields[1:])
-			return true
+			return leaveMemberlist(commandFields[1:])
 
 		case "memberlistupdate":
-			updateMemberlist(commandFields[1:])
-			return true
+			return updateMemberlist(commandFields[1:])
 
 		case "memberliststart":
-			startBroadcast(commandFields[1:])
-			return true
+			return startBroadcast(commandFields[1:])
 
 		case "memberlistshutdown":
-			shutdownBroadcast(commandFields[1:])
-			return true
+			return shutdownBroadcast(commandFields[1:])
 
 		case "memberlistshutdowntransport":
-			shutdownBroadcastTransport(commandFields[1:])
-			return true
+			return shutdownBroadcastTransport(commandFields[1:])
 
 		case "memberlisthealthscore":
-			getHealthScore(commandFields[1:])
-			return true
+			return getHealthScore(commandFields[1:])
 
 		case "memberlistdelete":
 			deleteMemberlist(commandFields[1:])
@@ -136,12 +121,10 @@ func executeCommand(commandline string) bool {
 			return true
 
 		case "chatstart":
-			startChat(commandFields[1:])
-			return true
+			return startChat(commandFields[1:])
 
 		case "chatleave":
-			leaveChat(commandFields[1:])
-			return true
+			return leaveChat(commandFields[1:])
 
 		case "chatmembers":
 			listChatMembers(commandFields[1:])
@@ -160,8 +143,7 @@ func executeCommand(commandline string) bool {
 			return true
 
 		case "execute":
-			executeScript(commandFields[1:])
-			return true
+			return executeScript(commandFields[1:])
 
 		case "sleep":
 			sleepScript(commandFields[1:])
@@ -172,8 +154,7 @@ func executeCommand(commandline string) bool {
 			return true
 
 		case "shell":
-			executeShellScript(commandFields[1:])
-			return true
+			return executeShellScript(commandFields[1:])
 
 		case "ping":
 			pingChat(commandFields[1:])
@@ -216,8 +197,7 @@ func executeCommand(commandline string) bool {
 
 // noCommand says that it's not an available command
 func noCommand(arguments []string) bool {
-	displayText(strings.Trim(fmt.Sprintf("cannot find command %q\n%s", arguments[0],
-		prompt), "\n"))
+	displayError(fmt.Sprintf("cannot find command %q", arguments[0]))
 	return false
 }
 
@@ -245,31 +225,21 @@ func sendMessage(arguments []string) {
 			}
 
 			// send message
-			fmt.Fprintf(conn, "%s%s\n", prompt, strings.Join(arguments, " "))
+			_, err = fmt.Fprintf(conn, "%s%s\n", prompt, strings.Join(arguments, " "))
+			if err != nil {
+				displayError("could not send message", err)
+			}
 
 			// close connection
-			conn.Close()
+			_ = conn.Close()
 		}
 	}
 }
 
-// checkmsg test.log alice hallo from bob
 func play(arguments []string) {
 
 	// Get rid off warning
 	_ = arguments
-
-	//testSourcesJson, err := json.MarshalIndent(testSourceFilters, "", "  ")
-	//if err != nil {
-	//	displayError("failed to marshall test run", err)
-	//}
-	//displayGreenText(string(testSourcesJson))
-
-	//currentTestEventsJson, err := json.MarshalIndent(currentTestEvents, "", "  ")
-	//if err != nil {
-	//	displayError("failed to marshall test run", err)
-	//}
-	//displayGreenText(string(currentTestEventsJson))
 }
 
 func initApplication(arguments []string) bool {
@@ -482,7 +452,11 @@ func initApplication(arguments []string) bool {
 		log.Printf("chatSelf: %v\n", chatSelf)
 		log.Printf("chatSelf.MsgType: %v\n", chatSelf.MsgType)
 
-		joiningChat(chatSelf)
+		err = joiningChat(chatSelf)
+		if err != nil {
+			displayError("could not join chat", err)
+			return
+		}
 
 		// wait for connections
 		for {
@@ -494,7 +468,7 @@ func initApplication(arguments []string) bool {
 			}
 
 			if chatStop {
-				conn.Close()
+				_ = conn.Close()
 				return
 			}
 
@@ -506,7 +480,7 @@ func initApplication(arguments []string) bool {
 
 				if err != nil {
 					if err == io.EOF {
-						conn.Close()
+						_ = conn.Close()
 						return
 					}
 					displayError("could not read message", err)
@@ -528,7 +502,7 @@ func initApplication(arguments []string) bool {
 				}
 
 				// close connection
-				conn.Close()
+				_ = conn.Close()
 			}(conn)
 		}
 	}()
@@ -548,10 +522,13 @@ func initApplication(arguments []string) bool {
 			}
 
 			// Send message tagged as joined
-			fmt.Fprintf(conn, "<joined> %s has joined\n", name)
+			_, err = fmt.Fprintf(conn, "<joined> %s has joined\n", name)
+			if err != nil {
+				displayError("could not send joined message", err)
+			}
 
 			// close connection
-			conn.Close()
+			_ = conn.Close()
 		}
 	}
 	return true
@@ -577,22 +554,27 @@ func quitApplication(arguments []string) {
 			// create TCP connection to recipient
 			conn, err := net.Dial("tcp", v.Sender)
 			if err != nil {
-				displayText(strings.Trim(fmt.Sprintf("could not dial to %v: %v\n%s", v.Sender, err,
-					prompt), "\n"))
+				displayError(fmt.Sprintf("could not dial to %v", v.Sender), err)
 				continue
 			}
 
 			// Send message tagged as left
-			fmt.Fprintf(conn, "<left> %s has left\n", name)
+			_, err = fmt.Fprintf(conn, "<left> %s is leaving\n", name)
+			if err != nil {
+				displayError("could not send left message", err)
+			}
 
 			// close connection
-			conn.Close()
+			_ = conn.Close()
 		}
 	}
 
 	// Send message about leaving via memberlist
 	if chatSelf.Name != "" {
-		leavingChat(chatSelf)
+		err = leavingChat(chatSelf)
+		if err != nil {
+			displayError("could not leave chat", err)
+		}
 	}
 
 	// Last entry in the logfile

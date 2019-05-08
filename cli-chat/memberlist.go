@@ -25,7 +25,7 @@ var (
 	mlogfile string
 )
 
-func configureMemberlist(arguments []string) {
+func configureMemberlist(arguments []string) bool {
 
 	// DefaultLocalConfig works like DefaultConfig, however it returns a configuration
 	// that is optimized for a local loopback environments. The default configuration is
@@ -38,9 +38,8 @@ func configureMemberlist(arguments []string) {
 		case "BindPort":
 			p, err := strconv.Atoi(arguments[1])
 			if err != nil {
-				displayText(strings.Trim(fmt.Sprintf("could not configure memberlist: %v\n%s", err,
-					prompt), "\n"))
-				return
+				displayError("could not configure memberlist", err)
+				return false
 			}
 			conf.BindPort = p
 		}
@@ -73,9 +72,9 @@ func configureMemberlist(arguments []string) {
 	// The name of this node. This must be unique in the cluster.
 	hostname, err := os.Hostname()
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("could not return hostname from OS: %v\n%s", err,
-			prompt), "\n"))
-		return
+
+		displayError("could not return hostname from OS", err)
+		return false
 	}
 	id := uuid.NewUUID().String()
 	conf.Name = hostname + "-" + name + "-" + id
@@ -103,19 +102,14 @@ func configureMemberlist(arguments []string) {
 		conf.Transport = nt
 	}
 	displayText(prompt)
+
+	return true
 }
 
 func showMemberlistConfiguration(arguments []string) {
 
 	// Get rid off warning
 	_ = arguments
-
-	//fmt.Printf("Memberlist Configuration: \n")
-	//fmt.Printf("--------------------------\n")
-	//fmt.Printf("Name: %q\n", c.Name)
-	//fmt.Printf("Transport: %v (interface)\n", c.Transport)
-	//fmt.Printf("BindAddr: %q\n", c.BindAddr)
-	//fmt.Printf("BindPort: %d\n", c.BindPort)
 
 	for i, w := range strings.Split(
 		strings.Replace(
@@ -128,14 +122,13 @@ func showMemberlistConfiguration(arguments []string) {
 	displayText(prompt)
 }
 
-func saveMemberlistConfiguration(arguments []string) {
+func saveMemberlistConfiguration(arguments []string) bool {
 
 	// Marshal array of struct
 	byteArray, err := json.Marshal(conf)
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("json.Marshal: %v\n%s", err,
-			prompt), "\n"))
-		return
+		displayError("could not marshall configuration", err)
+		return false
 	} else {
 		var filename string
 
@@ -153,32 +146,32 @@ func saveMemberlistConfiguration(arguments []string) {
 		str := strings.Replace(string(out.Bytes()), "{}", "null", -1)
 
 		err = ioutil.WriteFile(filename, append([]byte(str), byte('\n')), 0600)
-
+		if err != nil {
+			displayError("could not write to file", err)
+		}
 		log.Printf("%s\n", filename)
 	}
+	return true
 }
 
-func loadMemberlistConfiguration(arguments []string) {
+func loadMemberlistConfiguration(arguments []string) bool {
 
 	if len(arguments) == 0 {
-		displayText(strings.Trim(fmt.Sprintf("error: no filename to load specified\n%s",
-			prompt), "\n"))
-		return
+		displayError("no filename to load specified", err)
+		return false
 	}
 
 	b, err := ioutil.ReadFile(arguments[0])
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("ioutil.ReadFile: %v\n%s", err,
-			prompt), "\n"))
-		return
+		displayError("could not read file", err)
+		return false
 	}
 
 	var c memberlist.Config
 	err = json.Unmarshal(b, &c)
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("json.Unmarshal: %v\n%s", err,
-			prompt), "\n"))
-		return
+		displayError("could not unmarshall configuration", err)
+		return false
 	}
 	conf = &c
 
@@ -205,16 +198,17 @@ func loadMemberlistConfiguration(arguments []string) {
 	if nt, err := memberlist.NewNetTransport(nc); err == nil {
 		conf.Transport = nt
 	}
+	return true
 }
 
-func createMemberlist(arguments []string) {
+func createMemberlist(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if conf == nil {
 		displayError("could not create memberlist without configuration")
-		return
+		return false
 	}
 
 	// Create will create a new Memberlist using the given configuration.
@@ -225,11 +219,12 @@ func createMemberlist(arguments []string) {
 	mlist, err = memberlist.Create(conf)
 	if err != nil {
 		displayError("failed to create memberlist", err)
-		return
+		return false
 	}
 
 	displayText(strings.Trim(fmt.Sprintf("local node name: %v\n%s", mlist.LocalNode().Name,
 		prompt), "\n"))
+	return true
 }
 
 func showMemberlist(arguments []string) {
@@ -261,19 +256,19 @@ func showLocalNode(arguments []string) {
 		prompt), "\n"))
 }
 
-func listMembers(arguments []string) {
+func listMembers(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if mlist == nil {
-		displayText(strings.Trim(fmt.Sprintf("no memberlist found\n%s", prompt), "\n"))
-		return
+		displayError("no memberlist found", err)
+		return false
 	}
 
 	if len(mlist.Members()) == 0 {
-		displayText(strings.Trim(fmt.Sprintf("empty memberlist\n%s", prompt), "\n"))
-		return
+		displayError("empty memberlist", err)
+		return false
 	}
 
 	members := fmt.Sprintf("%s\n", prompt)
@@ -281,13 +276,14 @@ func listMembers(arguments []string) {
 		members += fmt.Sprintf("Name: %v %v\n", m.Name, m.Address())
 	}
 	displayText(members + prompt)
+	return true
 }
 
-func joinMemberlist(arguments []string) {
+func joinMemberlist(arguments []string) bool {
 
 	if mlist == nil {
-		displayText(strings.Trim(fmt.Sprintf("no memberlist found\n%s", prompt), "\n"))
-		return
+		displayError("no memberlist found", err)
+		return false
 	}
 
 	if len(arguments) > 0 {
@@ -295,28 +291,28 @@ func joinMemberlist(arguments []string) {
 		// Join arguments to slice of members
 		n, err := mlist.Join(arguments)
 		if err != nil {
-			displayText(strings.Trim(fmt.Sprintf("join the memberlist failed: %v\n%s", err, prompt), "\n"))
-			return
+			displayError("could not join the memberlist", err)
+			return false
 		}
 		displayText(strings.Trim(fmt.Sprintf("%d host(s) successfully contacted\n%s", n, prompt), "\n"))
 	} else {
 
 		if bootstrapData == nil {
-			displayText(strings.Trim(fmt.Sprintf("no bootstrap data found\n%s", prompt), "\n"))
-			return
+			displayError("no bootstrap data found", err)
+			return false
 		}
 
 		// No bootstrap server
 		if len(bootstrapData.Peers) == 0 {
-			displayText(strings.Trim(fmt.Sprintf("Nothing to join\n%s", prompt), "\n"))
-			return
+			displayError("nothing to join", err)
+			return false
 		}
 
 		// No other bootstrap server
 		if len(bootstrapData.Peers) == 1 {
 			if _, ok := bootstrapData.Peers[bootstrapApi.Self.ID]; !ok {
-				displayText(strings.Trim(fmt.Sprintf("Nothing to join\n5s", prompt), "\n"))
-				return
+				displayError("nothing to join", err)
+				return false
 			}
 		}
 
@@ -329,22 +325,24 @@ func joinMemberlist(arguments []string) {
 
 		n, err := mlist.Join(bootstrapAddresses)
 		if err != nil {
-			displayText(strings.Trim(fmt.Sprintf("join bootstrap peers to members failed: %v\n%s", err, prompt), "\n"))
-			return
+			displayError("failed to join bootstrap peers to members", err)
+			return false
 		}
 		displayText(strings.Trim(fmt.Sprintf("%d host(s) successfully contacted\n%s", n, prompt), "\n"))
 	}
 	displayText(strings.Trim(fmt.Sprintf("Known nodes: %v\n%s", mlist.Members(), prompt), "\n"))
+
+	return true
 }
 
-func leaveMemberlist(arguments []string) {
+func leaveMemberlist(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if mlist == nil {
-		displayText(strings.Trim(fmt.Sprintf("no memberlist found\n%s", prompt), "\n"))
-		return
+		displayError("no memberlistfound", err)
+		return false
 	}
 
 	// Leave will broadcast a leave message but will not shutdown the background
@@ -359,21 +357,23 @@ func leaveMemberlist(arguments []string) {
 	// after the cluster is already shut down.
 	err := mlist.Leave(time.Second)
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("leaveMemberlist failed: %v\n%s", err, prompt), "\n"))
-		return
+		displayError("failed to leave the memberlist", err)
+		return false
 	}
 	displayText(prompt)
+
+	return true
 }
 
 // ToDo: Is UpdateNode needed?
-func updateMemberlist(arguments []string) {
+func updateMemberlist(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if mlist == nil {
-		displayText(strings.Trim(fmt.Sprintf("no memberlist found\n%s", prompt), "\n"))
-		return
+		displayError("no memberlist found", err)
+		return false
 	}
 
 	// UpdateNode is used to trigger re-advertising the local node. This is
@@ -383,18 +383,20 @@ func updateMemberlist(arguments []string) {
 	// timeout is reached.
 	err := mlist.UpdateNode(time.Second)
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("updateMemberlist failed: %v\n%s", err, prompt), "\n"))
+		displayError("failed to update the memberlist", err)
+		return false
 	}
+	return true
 }
 
-func startBroadcast(arguments []string) {
+func startBroadcast(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if mlist == nil {
 		displayError("cannot start broadcasting without memberlist")
-		return
+		return false
 	}
 
 	// TransmitLimitedQueue is used to queue messages to broadcast to
@@ -417,16 +419,18 @@ func startBroadcast(arguments []string) {
 	// LocalNode is used to return the local Node
 	node := mlist.LocalNode()
 	displayText(strings.Trim(fmt.Sprintf("Local member %s:%d\n%s", node.Addr, node.Port, prompt), "\n"))
+
+	return true
 }
 
-func shutdownBroadcast(arguments []string) {
+func shutdownBroadcast(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if mlist == nil {
-		displayText(strings.Trim(fmt.Sprintf("no memberlist found\n%s", prompt), "\n"))
-		return
+		displayError("no memberlist found", err)
+		return false
 	}
 
 	// Shutdown will stop any background maintanence of network activity
@@ -438,46 +442,50 @@ func shutdownBroadcast(arguments []string) {
 	// This method is safe to call multiple times.
 	err = mlist.Shutdown()
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("failed mlist.Shutdown(): %v\n%s", err, prompt), "\n"))
-		return
+		displayError("failed to shutdown the memberlist", err)
+		return false
 	}
 
 	displayText(prompt)
+
+	return true
 }
 
-func shutdownBroadcastTransport(arguments []string) {
+func shutdownBroadcastTransport(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if conf == nil {
-		displayText(strings.Trim(fmt.Sprintf("nothing for memberlist configured\n%s", prompt), "\n"))
-		return
+		displayError("no configuration for the memberlist found", err)
+		return false
 	}
 
 	if conf.Transport == nil {
-		displayText(strings.Trim(fmt.Sprintf("no transport for memberlist configured\n%s", prompt), "\n"))
-		return
+		displayError("no configuration for memberlist transport found", err)
+		return false
 	}
 
 	err := conf.Transport.Shutdown()
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("failed Transport.Shutdown(): %v\n%s", err, prompt), "\n"))
+		displayError("failed to shutdown memberlist transport", err)
+		return false
 	}
-
+	return true
 }
 
-func getHealthScore(arguments []string) {
+func getHealthScore(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if mlist == nil {
-		displayText(strings.Trim(fmt.Sprintf("no memberlist found\n"), "\n"))
-		return
+		displayError("no memberlist found", err)
+		return false
 	}
 
 	displayText(strings.Trim(fmt.Sprintf("Health Score: %d\n", mlist.GetHealthScore()), "\n"))
+	return true
 }
 
 func deleteMemberlist(arguments []string) {

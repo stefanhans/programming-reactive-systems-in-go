@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/pborman/uuid"
@@ -40,7 +41,6 @@ func InitRun(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("b: %s\n", string(b))
 
 		mtx.Lock()
-		//currentTestRun.Queue = make([]string, 0)
 
 		for _, line := range strings.Split(string(b), "\n") {
 			line = strings.TrimSpace(line)
@@ -62,6 +62,19 @@ func InitRun(w http.ResponseWriter, r *http.Request) {
 			http.StatusInternalServerError)
 	}
 
+	currentTestDir = fmt.Sprintf("%s/%s", testDir, currentTestRun.ID)
+	err = os.MkdirAll(currentTestDir, os.ModePerm)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to create current test directory: %s", err),
+			http.StatusInternalServerError)
+	}
+
+	err = ioutil.WriteFile(fmt.Sprintf("%s/testRun.json", currentTestDir), append(testRunJson, byte('\n')), 0600)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write testrun to test directory: %s", err),
+			http.StatusInternalServerError)
+	}
+
 	_, err = fmt.Fprintf(w, string(testRunJson))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("failed to write response: %s", err),
@@ -74,6 +87,9 @@ curl -d "testqueue" http://localhost:8081/init
 */
 
 func GetCommand(w http.ResponseWriter, r *http.Request) {
+
+	// Get rid of warning
+	_ = r
 
 	// Marshal array of struct
 	testRunJson, err := json.MarshalIndent(currentTestRun, "", " ")
@@ -134,6 +150,9 @@ func RemoveCommand(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetRun(w http.ResponseWriter, r *http.Request) {
+
+	// Get rid of warning
+	_ = r
 
 	mtx.Lock()
 

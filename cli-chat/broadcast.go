@@ -43,8 +43,7 @@ func (b *broadcast) Finished() {
 func broadcastAddMessage(arguments []string) {
 
 	if len(arguments) < 2 {
-		displayText(strings.Trim(fmt.Sprintf("broadcastadd <key> <message> \n\t broadcastadd updates a key/message at all members\n%s",
-			prompt), "\n"))
+		displayError("not enough arguments specified")
 		return
 	}
 
@@ -64,8 +63,7 @@ func broadcastAddMessage(arguments []string) {
 	})
 
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("could not marshall update struct: %v\n%s", err,
-			prompt), "\n"))
+		displayError("could not marshall update struct", err)
 		return
 	}
 
@@ -108,8 +106,7 @@ func broadcastDelMessage(arguments []string) {
 			},
 		})
 		if err != nil {
-			displayText(strings.Trim(fmt.Sprintf("could not marshall update struct: %v\n%s", err,
-				prompt), "\n"))
+			displayError("could not marshall update struct", err)
 			return
 		}
 
@@ -151,16 +148,18 @@ func pingChatMember(arguments []string) {
 
 		conn, err := net.Dial("tcp", chatMembers[arguments[0]].Sender)
 		if err != nil {
-			displayText(strings.Trim(fmt.Sprintf("could not dial to %v: %v\n%s", chatMembers[arguments[0]].Sender, err,
-				prompt), "\n"))
+			displayError(fmt.Sprintf("could not dial to %v", chatMembers[arguments[0]].Sender), err)
 			return
 		}
 
 		// send message
-		fmt.Fprintf(conn, "")
+		_, err = fmt.Fprintf(conn, "")
+		if err != nil {
+			displayError("could not send ping", err)
+		}
 
 		// close connection
-		conn.Close()
+		_ = conn.Close()
 	}
 }
 
@@ -179,10 +178,13 @@ func isChatMemberReachable(name string) (bool, error) {
 		}
 
 		// send message
-		fmt.Fprintf(conn, "")
+		_, err = fmt.Fprintf(conn, "")
+		if err != nil {
+			displayError("could not send ping", err)
+		}
 
 		// close connection
-		conn.Close()
+		_ = conn.Close()
 
 		return true, nil
 	}
@@ -198,7 +200,7 @@ func joiningChat(chatMember *chatmember.Member) error {
 
 	b, err := json.Marshal(chatMember)
 	if err != nil {
-		displayError("could not marshall joining chat member: %v\n%s", err)
+		displayError("could not marshall joining chat member", err)
 		return err
 	}
 
@@ -248,7 +250,7 @@ func leavingChat(chatMember *chatmember.Member) error {
 
 	if broadcasts == nil {
 		logRed("no broadcasts defined")
-		displayRedText("no broadcasts defined")
+		displayError("no broadcasts defined")
 		displayText(prompt)
 		return nil
 	}
@@ -271,8 +273,7 @@ func pingMember(chatMember *chatmember.Member) {
 
 	b, err := json.Marshal(chatMember)
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("could not marshall chat member to ping: %v\n%s", err,
-			prompt), "\n"))
+		displayError("could not marshall chat member", err)
 		return
 	}
 

@@ -12,29 +12,28 @@ import (
 )
 
 var (
-	chatSelf *chatmember.Member = &chatmember.Member{}
+	chatSelf = &chatmember.Member{}
 	chatStop bool
 )
 
 // startChat is the CLI function of 'chatjoin' and initiates the chat listener
-func startChat(arguments []string) {
+func startChat(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
 
 	if conf == nil {
 		displayError("/chatjoin: could not start listener without memberlist configuration")
-		return
+		return false
 	}
 
 	if mlist == nil {
 		displayError("/chatjoin: could not start listener without created memberlist")
-		return
+		return false
 	}
 
 	if broadcasts == nil {
 		displayError("/chatjoin: could not start listener without broadcasting memberlist")
-		return
 	}
 
 	chatStop = false
@@ -74,13 +73,12 @@ func startChat(arguments []string) {
 			// accept connection
 			conn, err := listener.Accept()
 			if err != nil {
-				displayText(strings.Trim(fmt.Sprintf("could not accept connection: %v\n%s", err,
-					prompt), "\n"))
+				displayError("could not accept connection", err)
 				continue
 			}
 
 			if chatStop {
-				conn.Close()
+				_ = conn.Close()
 				return
 			}
 
@@ -92,7 +90,7 @@ func startChat(arguments []string) {
 
 				if err != nil {
 					if err == io.EOF {
-						conn.Close()
+						_ = conn.Close()
 						return
 					}
 					displayError("could not read message", err)
@@ -111,13 +109,14 @@ func startChat(arguments []string) {
 				displayColoredMessages(msg)
 
 				// close connection
-				conn.Close()
+				_ = conn.Close()
 			}(conn)
 		}
 	}()
+	return true
 }
 
-func leaveChat(arguments []string) {
+func leaveChat(arguments []string) bool {
 
 	// Get rid off warning
 	_ = arguments
@@ -133,7 +132,7 @@ func leaveChat(arguments []string) {
 	mtx.Unlock()
 
 	// Send message about leaving via memberlist
-	leavingChat(chatSelf)
+	return (leavingChat(chatSelf) != nil)
 }
 
 func pingChat(arguments []string) {
@@ -155,7 +154,7 @@ func stopChat(arguments []string) {
 	chatStop = true
 
 	conn, _ := net.Dial("tcp", chatSelf.Sender)
-	conn.Close()
+	_ = conn.Close()
 
 	displayText(strings.Trim(fmt.Sprintf("stopped chat listener of %q\n%s", chatSelf.Sender,
 		prompt), "\n"))

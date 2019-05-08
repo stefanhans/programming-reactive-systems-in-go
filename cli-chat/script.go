@@ -12,19 +12,17 @@ import (
 	"time"
 )
 
-func executeScript(arguments []string) {
+func executeScript(arguments []string) bool {
 
 	if len(arguments) == 0 {
-		displayText(strings.Trim(fmt.Sprintf("no filename to execute specified\n%s",
-			prompt), "\n"))
-		return
+		displayError("no file for execution specified")
+		return false
 	}
 
 	b, err := ioutil.ReadFile(arguments[0])
 	if err != nil {
-		displayText(strings.Trim(fmt.Sprintf("could not read the file %q: %v\n%s",
-			prompt, arguments[0], err), "\n"))
-		return
+		displayError(fmt.Sprintf("could not read file %q", arguments[0]), err)
+		return false
 	}
 
 	prompt = fmt.Sprintf("<%s %q> ", name, arguments[0])
@@ -50,6 +48,8 @@ func executeScript(arguments []string) {
 	}
 	prompt = fmt.Sprintf("<%s> ", name)
 	displayText(prompt)
+
+	return true
 }
 
 func sleepScript(arguments []string) {
@@ -71,18 +71,17 @@ func echoScript(arguments []string) {
 	displayText(strings.Trim(fmt.Sprintf("%s", strings.Join(arguments, " ")), "\n"))
 }
 
-func executeShellScript(arguments []string) {
+func executeShellScript(arguments []string) bool {
 
 	if len(arguments) == 0 {
 		displayError("no shell script specified")
-		//displayText(prompt)
-		return
+		return false
 	}
 
 	binary, lookErr := exec.LookPath(arguments[0])
 	if lookErr != nil {
 		displayError("not found", lookErr)
-		return
+		return false
 	}
 
 	var cmd *exec.Cmd
@@ -107,22 +106,10 @@ func executeShellScript(arguments []string) {
 	err := cmd.Run()
 	if err != nil {
 		displayError("could not run", err)
-		return
+		return false
 	}
-	//fmt.Printf("in all caps: %q\n", out.String())
+
 	displayText(strings.Trim(fmt.Sprintf("%s%s", out.String(), prompt), "\n"))
 
-	//execErr := cmd.Run()
-	//if execErr != nil {
-	//	panic(execErr)
-	//}
-	//
-	//out, err := cmd.Output()
-	//if err != nil {
-	//	displayError("output error", err)
-	//}
-	//
-	//displayGreenText(string(out))
-	//
-	//syscall.Exec(arguments[0], []string{}, []string{})
+	return true
 }

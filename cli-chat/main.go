@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -17,55 +18,51 @@ var (
 
 	err error
 
-	debug         *bool
-	debugfilename *string
-	initfilename  *string
+	logfile *string
 
-	testMode  *bool
-	testStart *bool
+	testMode     *bool
+	testfilename *string
 )
 
 func main() {
 
-	// todo -nolog and refactor debug -> log
-
 	// test switches on testing
-	testMode = flag.Bool("test", false, "switches on test mode")
+	testMode = flag.Bool("test", false,
+		"switches on test mode")
 
-	// start test
-	testStart = flag.Bool("start", false, "last peer starts the test run")
+	// testfilename is the file in TEST_DIR to read test commands
+	testfilename = flag.String("testfile", "",
+		"file to load test commands")
 
-	// debug switches on debugging
-	debug = flag.Bool("debug", true, "switches on debugging")
-
-	// debugfilename is the file to write debugging output
-	debugfilename = flag.String("debugfile", "", "file to write debugging output to, use /dev/null to suppress debugging")
+	// logfile is the file to write loggging output
+	logfile = flag.String("logfile", "",
+		"file to write logging output to; use /dev/null to suppress logging")
 
 	// Parse input and check arguments
 	flag.Parse()
 	if flag.NArg() < 1 {
-		_, _ = fmt.Fprintln(os.Stderr, "missing or wrong parameter: <name>")
-		// todo usage
+		_, _ = fmt.Fprintln(os.Stderr,
+			fmt.Sprintf("usage: "+
+				"\t ./cli-chat [-test [-testfile=<filename>]] "+
+				"[-logfile=<filename> | -logfile=/dev/null] <name>"))
 		os.Exit(1)
 	}
+
 	name = flag.Arg(0)
 	prompt = fmt.Sprintf("<%s> ", name)
 
-	// Start debugging to file, if switched on or filename specified
-	if *debug || len(*debugfilename) > 0 {
-
-		debugfile, err := startLogging(*debugfilename)
-		if err != nil {
-			panic(err)
-		}
-		defer debugfile.Close()
-
-		// Current logfilename
-		fmt.Printf("Start logging to %q\n", logfilename)
-
-		// First entry in the logfile
-		log.Printf("Session starting\n")
+	// Start logging to specified or default logfile
+	file, err := startLogging(*logfile)
+	if err != nil {
+		panic(err)
 	}
+	defer file.Close()
+
+	// Current logfilename
+	fmt.Printf("Start logging to %q\n", logfilename)
+
+	// First entry in the logfile
+	log.Printf("Session starting\n")
 
 	// Create the TUI
 	clientGui, err = gocui.NewGui(gocui.OutputNormal)
@@ -88,37 +85,46 @@ func main() {
 
 	if *testMode {
 
-		cmdLogging(strings.Split("on testqueue.log", " "))
-
-		//logBlue(fmt.Sprintf("Empty: %v\n", currentTestRun.Queue))
-
-		if !initTest("testqueue") {
-			displayRedText("test load failed")
+		// http://localhost:8081
+		testSidecarUrl = os.Getenv("TEST_SIDECAR_SERVER")
+		_, err := url.ParseRequestURI(testSidecarUrl)
+		if err != nil {
+			fmt.Printf("environment variable TEST_SIDECAR_SERVER is not a valid URL")
+			return
 		}
-		//logBlue(fmt.Sprintf("Init: %v\n", currentTestRun.Queue))
+
+		if *testfilename != "" {
+			testName = strings.Split(*testfilename, ".")[0]
+		} else {
+			// Todo: testing with multiple tests
+			testName = "testqueue"
+		}
+
+		cmdLogging(strings.Split(fmt.Sprintf("on %s.log", testName), " "))
+
+		if !initTest(testName) {
+			displayError("test load failed")
+		}
 
 		for !testend {
 
 			if executeTestCommand() {
 
-				displayYelloText("command execution successful")
+				logGreen("command execution successful")
 
 				sendTestCommandResult("OK")
 
 				if removeTest() {
-					displayYelloText("command remove successful")
+					logGreen("command remove successful")
 				} else {
-					displayRedText("command remove error")
+					logYellow("command remove error")
 				}
 			} else {
-				displayRedText("command execution failed")
-
+				logYellow("command execution failed")
 			}
 
-			//logBlue(fmt.Sprintf("After: %v\n", currentTestRun.Queue))
-
 			if !refreshTest() {
-				displayRedText("command load failed")
+				displayError("command load failed")
 				break
 			}
 
@@ -126,18 +132,20 @@ func main() {
 				continue
 			}
 
-			//logBlue(fmt.Sprintf("Commands: %v\n", currentTestRun.Queue))
-
 			time.Sleep(time.Second * 1)
 		}
 
 		displayGreenText(fmt.Sprintf("Test %s finished", currentTestRun.ID))
 
 		if !prepareTestSummary() {
-			displayRedText("test summary preparation failed")
+			displayError("test summary preparation failed")
 		}
 
 		cmdLogging([]string{"off"})
+	} else {
+		if !executeCommand("init") {
+			displayError("could not initialize chat")
+		}
 	}
 
 	select {}

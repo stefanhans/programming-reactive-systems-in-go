@@ -35,7 +35,7 @@ func PutTestEvent(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("\n--------\ncurrentTestEventFilter: %v\n", currentTestEventFilter)
 
-	new := true
+	isNew := true
 	for i, testEventFilter := range currentTestEventFilters {
 
 		fmt.Printf("\nLOOP testEventFilter: %v\n", testEventFilter)
@@ -44,7 +44,7 @@ func PutTestEvent(w http.ResponseWriter, r *http.Request) {
 			testEventFilter.Peer == currentTestEventFilter.Peer &&
 			testEventFilter.Filter == currentTestEventFilter.Filter {
 			currentTestEventFilters[i].NumReceivedEvents++
-			new = false
+			isNew = false
 			fmt.Printf("\nUPDATED\ncurrentTestEventFilter: %v\n", currentTestEventFilter)
 
 			continue
@@ -52,7 +52,7 @@ func PutTestEvent(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if new {
+	if isNew {
 		currentTestEventFilter.NumReceivedEvents = 1
 		currentTestEventFilters = append(currentTestEventFilters, currentTestEventFilter)
 		fmt.Printf("\nAPPENDED\ncurrentTestEventFilters: %v\n", currentTestEventFilters)
@@ -80,6 +80,9 @@ curl -d "testID testname alice OK just an comment" http://localhost:8081/putresu
 
 func GetTestEvents(w http.ResponseWriter, r *http.Request) {
 
+	// Get rid of warning
+	_ = r
+
 	// Marshal array of struct
 	testEventFiltersJson, err := json.MarshalIndent(currentTestEventFilters, "", " ")
 	if err != nil {
@@ -96,28 +99,4 @@ func GetTestEvents(w http.ResponseWriter, r *http.Request) {
 
 /*
 curl http://localhost:8081/getevents
-*/
-
-func GetTestSourceFilters(w http.ResponseWriter, r *http.Request) {
-
-	mtx.Lock()
-
-	// Marshal array of struct
-	testEventFiltersJson, err := json.MarshalIndent(currentTestEventFilters, "", " ")
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to write marshal currentTestEventFilters: %s", err),
-			http.StatusInternalServerError)
-	}
-
-	mtx.Unlock()
-
-	_, err = fmt.Fprintf(w, string(testEventFiltersJson))
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to write response: %s", err),
-			http.StatusInternalServerError)
-	}
-}
-
-/*
-curl http://localhost:8081/getfilters
 */

@@ -66,7 +66,11 @@ func (d *delegate) NotifyMsg(b []byte) {
 			return
 		}
 
-		joiningChat(chatSelf)
+		err = joiningChat(chatSelf)
+		if err != nil {
+			logRed(fmt.Sprintf("could not join chat: %v", err))
+			return
+		}
 
 		mtx.Lock()
 		chatMembers[newChatMember.Name] = newChatMember

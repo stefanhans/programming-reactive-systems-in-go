@@ -19,8 +19,8 @@ func runTUI() error {
 	clientGui.SetManagerFunc(layout)
 
 	// Bind keys with functions
-	clientGui.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit)
-	clientGui.SetKeybinding("input", gocui.KeyEnter, gocui.ModNone, send)
+	_ = clientGui.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit)
+	_ = clientGui.SetKeybinding("input", gocui.KeyEnter, gocui.ModNone, send)
 
 	// Start main event loop of the TUI
 	return clientGui.MainLoop()
@@ -73,14 +73,8 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 	// Get rid of warnings
 	_, _ = g, v
 
-	// Unsubscribe via PublisherClient
-	//Unsubscribe()
-
 	// Last entry in the individual log file
 	log.Println("Session closing")
-
-	// Last entry in the common log file
-	//cLog.Printf("Session closing - details in %q\n", logfilename)
 
 	return gocui.ErrQuit
 }
@@ -117,7 +111,6 @@ func send(g *gocui.Gui, inputView *gocui.View) error {
 }
 
 func displayColoredMessages(msg string) {
-	//log.Printf("msg: %v\n", msg)
 
 	switch {
 	case strings.Fields(msg)[0] == "<info>" ||
@@ -134,7 +127,7 @@ func displayColoredMessages(msg string) {
 }
 
 // Display text in "messages"
-func displayText(txt string) error {
+func displayText(txt string) {
 
 	// Update the "messages" view as soon as possible
 	clientGui.Update(func(g *gocui.Gui) error {
@@ -142,8 +135,11 @@ func displayText(txt string) error {
 		if err != nil {
 			return fmt.Errorf("could not display text: %v\n", err)
 		}
-		fmt.Fprintln(messagesView, txt)
+		_, err = fmt.Fprintln(messagesView, txt)
 		logGreen(txt)
+		if err != nil {
+			logRed(err.Error())
+		}
 
 		if *testMode {
 			if sourceFilters, ok := testSourceFilters["messagesView"]; ok {
@@ -153,12 +149,11 @@ func displayText(txt string) error {
 				}
 			}
 		}
-		return nil
+		return err
 	})
-	return nil
 }
 
-func displayGreenText(txt string) error {
+func displayGreenText(txt string) {
 
 	// Update the "messages" view as soon as possible
 	clientGui.Update(func(g *gocui.Gui) error {
@@ -167,14 +162,16 @@ func displayGreenText(txt string) error {
 			return fmt.Errorf("could not display text: %v\n", err)
 		}
 
-		fmt.Fprintln(messagesView, strings.Trim(fmt.Sprintf("\033[3%d;%dm%s\033[0m", 2, 1, txt), "\n"))
+		_, err = fmt.Fprintln(messagesView, strings.Trim(fmt.Sprintf("\033[3%d;%dm%s\033[0m", 2, 1, txt), "\n"))
 		logGreen(txt)
-		return nil
+		if err != nil {
+			logRed(err.Error())
+		}
+		return err
 	})
-	return nil
 }
 
-func displayYelloText(txt string) error {
+func displayYelloText(txt string) {
 
 	// Update the "messages" view as soon as possible
 	clientGui.Update(func(g *gocui.Gui) error {
@@ -183,14 +180,16 @@ func displayYelloText(txt string) error {
 			return fmt.Errorf("could not display text: %v\n", err)
 		}
 
-		fmt.Fprintln(messagesView, strings.Trim(fmt.Sprintf("\033[3%d;%dm%s\033[0m", 3, 1, txt), "\n"))
+		_, err = fmt.Fprintln(messagesView, strings.Trim(fmt.Sprintf("\033[3%d;%dm%s\033[0m", 3, 1, txt), "\n"))
 		logYellow(txt)
-		return nil
+		if err != nil {
+			logRed(err.Error())
+		}
+		return err
 	})
-	return nil
 }
 
-func displayRedText(txt string) error {
+func displayRedText(txt string) {
 
 	// Update the "messages" view as soon as possible
 	clientGui.Update(func(g *gocui.Gui) error {
@@ -199,15 +198,17 @@ func displayRedText(txt string) error {
 			return fmt.Errorf("could not display text: %v\n", err)
 		}
 
-		fmt.Fprintln(messagesView, strings.Trim(fmt.Sprintf("\033[3%d;%dm%s\033[0m", 1, 1, txt), "\n"))
+		_, err = fmt.Fprintln(messagesView, strings.Trim(fmt.Sprintf("\033[3%d;%dm%s\033[0m", 1, 1, txt), "\n"))
 		logRed(txt)
-		return nil
+		if err != nil {
+			logRed(err.Error())
+		}
+		return err
 	})
-	return nil
 }
 
 // Send error to logfile and "messages"; txt is the text before ":"
-func displayError(txt string, err ...error) error {
+func displayError(txt string, err ...error) {
 
 	var errorStr string
 
@@ -217,13 +218,11 @@ func displayError(txt string, err ...error) error {
 		errorStr = fmt.Sprintf("%s: %v\n", txt, err)
 	}
 
-	out := displayRedText(strings.Trim(errorStr, "\n"))
+	displayRedText(strings.Trim(errorStr, "\n"))
 	displayText(prompt)
-
-	return out
 }
 
-func displayJson(json []byte) error {
-	return displayText(strings.Trim(fmt.Sprintf("%s\n%s", json,
+func displayJson(json []byte) {
+	displayText(strings.Trim(fmt.Sprintf("%s\n%s", json,
 		prompt), "\n"))
 }

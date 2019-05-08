@@ -28,7 +28,7 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 
 	testPeer := arguments[0]
 
-	for _, currentTestSummary := range currentTestSummaries {
+	for _, currentTestSummary := range currentTestSummary {
 		if currentTestSummary.Peer == testPeer {
 			http.Error(w, fmt.Sprintf("error: summary of %s already processed\n", testPeer),
 				http.StatusInternalServerError)
@@ -44,28 +44,28 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 	for i, result := range currentTestResult.CommandResults {
 		if result.Peer == testPeer {
 
-			currentTestSummary.ID = currentTestResult.ID
-			currentTestSummary.Name = currentTestResult.Name
-			currentTestSummary.Peer = testPeer
-			currentTestSummary.Kind = "command"
-			currentTestSummary.Status = result.Status
-			currentTestSummary.Test = result.Data
-			currentTestSummary.Result = result.Data
+			currentTestEvaluation.ID = currentTestResult.ID
+			currentTestEvaluation.Name = currentTestResult.Name
+			currentTestEvaluation.Peer = testPeer
+			currentTestEvaluation.Kind = "command"
+			currentTestEvaluation.Status = result.Status
+			currentTestEvaluation.Test = result.Data
+			currentTestEvaluation.Result = result.Data
 
-			currentTestSummaries = append(currentTestSummaries, currentTestSummary)
+			currentTestSummary = append(currentTestSummary, currentTestEvaluation)
 
 			if strings.Split(result.Data, " ")[0] == "testfilter" {
 
 				source := strings.Split(result.Data, " ")[1]
 				filter := strings.Join(strings.Split(result.Data, " ")[3:], " ")
 
-				currentTestSummary.ID = currentTestResult.ID
-				currentTestSummary.Name = currentTestResult.Name
-				currentTestSummary.Peer = testPeer
-				currentTestSummary.Kind = "event"
-				currentTestSummary.Test = result.Data
+				currentTestEvaluation.ID = currentTestResult.ID
+				currentTestEvaluation.Name = currentTestResult.Name
+				currentTestEvaluation.Peer = testPeer
+				currentTestEvaluation.Kind = "event"
+				currentTestEvaluation.Test = result.Data
 
-				currentTestSummary.Status = "FAILED"
+				currentTestEvaluation.Status = "FAILED"
 				for _, eventFilter := range currentTestEventFilters {
 
 					fmt.Printf("\nXXX\n eventFilter: %s\n\n", eventFilter)
@@ -80,7 +80,7 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 					fmt.Printf("eventFilter.Filter %q == filter %q\n",
 						eventFilter.Filter, filter)
 
-					currentTestSummary.Comment = fmt.Sprintf("NumExpectedEvents: %d, NumReceivedEvents: %d",
+					currentTestEvaluation.Comment = fmt.Sprintf("NumExpectedEvents: %d, NumReceivedEvents: %d",
 						eventFilter.NumExpectedEvents, eventFilter.NumReceivedEvents)
 
 					if eventFilter.Peer == testPeer &&
@@ -88,15 +88,42 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 						eventFilter.Filter == filter &&
 						eventFilter.NumExpectedEvents == eventFilter.NumReceivedEvents {
 
-						currentTestSummary.Status = "OK"
+						currentTestEvaluation.Status = "OK"
 					}
 				}
-				currentTestSummary.Result = result.Data
-				currentTestSummaries = append(currentTestSummaries, currentTestSummary)
+				currentTestEvaluation.Result = result.Data
+				currentTestSummary = append(currentTestSummary, currentTestEvaluation)
 			}
 
 			fmt.Printf("%d result: %s\n", i, result)
 		}
+	}
+
+	// Marshal array of struct
+	testEventFiltersJson, err := json.MarshalIndent(currentTestEventFilters, "", " ")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write marshal currentTestEventFilter: %s", err),
+			http.StatusInternalServerError)
+	}
+
+	err = ioutil.WriteFile(fmt.Sprintf("%s/testEventFilters.json", currentTestDir),
+		append(testEventFiltersJson, byte('\n')), 0600)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write testeventfilters to test directory: %s", err),
+			http.StatusInternalServerError)
+	}
+
+	currentTestSummaryJson, err := json.MarshalIndent(currentTestSummary, "", " ")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to marshal currentTestSummary: %s", err),
+			http.StatusInternalServerError)
+	}
+
+	err = ioutil.WriteFile(fmt.Sprintf("%s/testSummary.json", currentTestDir),
+		append(currentTestSummaryJson, byte('\n')), 0600)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write testsummary to test directory: %s", err),
+			http.StatusInternalServerError)
 	}
 
 	_, err = fmt.Fprintf(w, "")
@@ -112,10 +139,13 @@ curl -d "alice" http://localhost:8081/preparesummary
 
 func GetTestSummary(w http.ResponseWriter, r *http.Request) {
 
+	// Get rid of warning
+	_ = r
+
 	// Marshal array of struct
-	currentTestSummariesJson, err := json.MarshalIndent(currentTestSummaries, "", " ")
+	currentTestSummariesJson, err := json.MarshalIndent(currentTestSummary, "", " ")
 	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to write marshal currentTestSummary: %s", err),
+		http.Error(w, fmt.Sprintf("failed to write marshal currentTestEvaluation: %s", err),
 			http.StatusInternalServerError)
 	}
 

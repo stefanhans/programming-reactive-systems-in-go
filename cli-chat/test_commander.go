@@ -45,14 +45,14 @@ func executeTestEventCommand(commandFields []string) bool {
 		case "testfilter":
 			return addTestFilter(commandFields[1:])
 
-		case "testsummary":
-			return showTestSummary(commandFields[1:])
+		case "testlocalfilters":
+			return showLocalTestFilters(commandFields[1:])
 
 		case "testevents":
 			return showTestEvents(commandFields[1:])
 
-		case "testfilters":
-			return showTestSourceFilters(commandFields[1:])
+		case "testsummary":
+			return showTestSummary(commandFields[1:])
 
 		default:
 			return noCommand(commandFields)
@@ -90,15 +90,13 @@ func addTestFilter(arguments []string) bool {
 
 func showTestSummary(arguments []string) bool {
 
-	//if len(arguments) < 2 {
-	//	displayError("not enough arguments defined to addTestFilter")
-	//	return false
-	//}
+	// Get rid off warning
+	_ = arguments
 
 	currentTestSummaries = make([]TestSummary, 0)
 
 	if !callTestSummary() {
-		displayRedText("test summary failed")
+		displayError("test summary failed")
 		return false
 	}
 
@@ -135,14 +133,6 @@ func showTestSummary(arguments []string) bool {
 					test.Status, test.Result))
 
 		}
-
-		/*
-
-			<alice> 2019/05/03 11:25:00 logging.go:61: test 7: {3d9a6e86-6d85-11e9-9c25-8c8590a2bb7c testqueue bob OK command  testfilter messagesView <alice> test }
-
-			<alice> 2019/05/03 11:25:00 logging.go:61: test 8: {3d9a6e86-6d85-11e9-9c25-8c8590a2bb7c testqueue bob OK event  testfilter messagesView <alice> test }
-		*/
-
 	}
 
 	out += fmt.Sprintf("-------------------------------------")
@@ -153,17 +143,13 @@ func showTestSummary(arguments []string) bool {
 	return true
 }
 
-//
-
 func showTestEvents(arguments []string) bool {
 
-	//if len(arguments) < 2 {
-	//	displayError("not enough arguments defined to addTestFilter")
-	//	return false
-	//}
+	// Get rid off warning
+	_ = arguments
 
 	if !callTestEvents() {
-		displayRedText("call test events failed")
+		displayError("call test events failed")
 		return false
 	}
 
@@ -175,7 +161,7 @@ func showTestEvents(arguments []string) bool {
 	testID := currentTestEventFilters[0].ID
 	testName := currentTestEventFilters[0].Name
 
-	out := fmt.Sprintf("Event filter of %q (%s)\n", testName, testID)
+	out := fmt.Sprintf("Event filters of %q (%s)\n", testName, testID)
 	out += fmt.Sprintf("-------------------------------------")
 	out += fmt.Sprintf("-------------------------------------\n")
 
@@ -188,11 +174,10 @@ func showTestEvents(arguments []string) bool {
 			return false
 		}
 
-		out += fmt.Sprintf("%s %s: Filter: %q Event: %q\n",
-			filter.Peer, filter.Source, filter.Filter, filter.Event)
-
-		/*filter: {ef87a344-6dbb-11e9-855d-8c8590a2bb7c testqueue bob messagesView <alice> test <alice> test}*/
-
+		out += fmt.Sprintf("%s %s: Filter: %q (%d) Event: %q (%d)\n",
+			filter.Peer, filter.Source,
+			filter.Filter, filter.NumExpectedEvents,
+			filter.Event, filter.NumReceivedEvents)
 	}
 
 	out += fmt.Sprintf("-------------------------------------")
@@ -203,12 +188,10 @@ func showTestEvents(arguments []string) bool {
 	return true
 }
 
-func showTestSourceFilters(arguments []string) bool {
+func showLocalTestFilters(arguments []string) bool {
 
-	//if len(arguments) < 2 {
-	//	displayError("not enough arguments defined to addTestFilter")
-	//	return false
-	//}
+	// Get rid off warning
+	_ = arguments
 
 	if len(testSourceFilters) == 0 {
 		displayError("no test event sources available")
@@ -225,10 +208,10 @@ func showTestSourceFilters(arguments []string) bool {
 
 		filterStr := ""
 		for _, filter := range filters {
-			filterStr += fmt.Sprintf("%q ", filter)
+			filterStr += fmt.Sprintf("\t%q (%d events expected)\n", filter.Filter, filter.NumExpectedEvents)
 		}
 
-		out += fmt.Sprintf("%s %s\n", source, filterStr)
+		out += fmt.Sprintf("%s\n%s\n", source, filterStr)
 	}
 
 	out += fmt.Sprintf("-------------------------------------")

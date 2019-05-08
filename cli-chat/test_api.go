@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -11,18 +10,12 @@ import (
 
 // Todo: Make the API a library
 
-func decodeJsonBytes(txt []byte) []byte {
-	txt = bytes.Replace(txt, []byte(`\u003c`), []byte("<"), -1)
-	txt = bytes.Replace(txt, []byte(`\u003e`), []byte(">"), -1)
-	return bytes.Replace(txt, []byte(`\u0026`), []byte("&"), -1)
-}
-
 // initTest sends a name to initialize an existing test
 // to the test-sidecar-server running under http://localhost:8081
 func initTest(testName string) bool {
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/init",
+	res, err := http.Post(testSidecarUrl+"/init",
 		"application/x-www-form-urlencoded",
 		strings.NewReader(fmt.Sprintf("%s",
 			testName)))
@@ -42,7 +35,7 @@ func initTest(testName string) bool {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		displayError("failed to read response from test sidecar", err)
 		return false
@@ -54,9 +47,10 @@ func initTest(testName string) bool {
 		return false
 	}
 
-	displayGreenText(fmt.Sprintf("Test %s starting", currentTestRun.ID))
+	currentTestEventFilter.ID = currentTestRun.ID
+	currentTestEventFilter.Name = currentTestRun.Name
 
-	initFilter()
+	displayGreenText(fmt.Sprintf("Test %s starting", currentTestRun.ID))
 
 	//testRunJson, err := json.MarshalIndent(currentTestRun, "", "  ")
 	//if err != nil {
@@ -64,13 +58,14 @@ func initTest(testName string) bool {
 	//	return false
 	//}
 	//displayGreenText(string(testRunJson))
+
 	return true
 }
 
 func refreshTest() bool {
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/getcommand",
+	res, err := http.Post(testSidecarUrl+"/getcommand",
 		"application/x-www-form-urlencoded",
 		strings.NewReader(""))
 	if err != nil {
@@ -88,7 +83,7 @@ func refreshTest() bool {
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		displayError("failed to read tests response from test sidecar server", err)
 		return false
@@ -110,7 +105,7 @@ func refreshTest() bool {
 func sendTestCommandResult(status string) bool {
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/putresult",
+	res, err := http.Post(testSidecarUrl+"/putresult",
 		"application/x-www-form-urlencoded",
 		strings.NewReader(fmt.Sprintf("%s %s %s %s %s", currentTestRun.ID, currentTestRun.Name, name,
 			status, strings.TrimSpace(strings.TrimLeft(currentTestRun.Commands[0], name)))))
@@ -139,14 +134,6 @@ func sendTestCommandResult(status string) bool {
 	return true
 }
 
-func initFilter() {
-	//currentTestEvents.ID = currentTestRun.ID
-	//currentTestEvents.Name = currentTestRun.Name
-
-	currentTestEventFilter.ID = currentTestRun.ID
-	currentTestEventFilter.Name = currentTestRun.Name
-}
-
 func sendTestFilterEvent(source string, event string) {
 
 	currentTestEventFilter.Source = source
@@ -159,7 +146,7 @@ func sendTestFilterEvent(source string, event string) {
 	}
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/putevent",
+	res, err := http.Post(testSidecarUrl+"/putevent",
 		"application/json",
 		strings.NewReader(string(testEventFilterJson)))
 	if err != nil {
@@ -168,7 +155,7 @@ func sendTestFilterEvent(source string, event string) {
 	if res.StatusCode != http.StatusOK {
 		b, _ := ioutil.ReadAll(res.Body)
 
-		displayRedText(fmt.Sprintf("Received no \"200 OK\" from put sidecar event: %q",
+		displayError(fmt.Sprintf("Received no \"200 OK\" from put sidecar event: %q",
 			strings.TrimSuffix(string(b), "\n")))
 
 	}
@@ -186,7 +173,7 @@ func sendTestFilterEvent(source string, event string) {
 func prepareTestSummary() bool {
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/preparesummary",
+	res, err := http.Post(testSidecarUrl+"/preparesummary",
 		"application/json",
 		strings.NewReader(name))
 	if err != nil {
@@ -195,7 +182,7 @@ func prepareTestSummary() bool {
 	if res.StatusCode != http.StatusOK {
 		b, _ := ioutil.ReadAll(res.Body)
 
-		displayRedText(fmt.Sprintf("Received no \"200 OK\" from put sidecar event: %q",
+		displayError(fmt.Sprintf("Received no \"200 OK\" from put sidecar event: %q",
 			strings.TrimSuffix(string(b), "\n")))
 
 	}
@@ -215,7 +202,7 @@ func prepareTestSummary() bool {
 func callTestSummary() bool {
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/getsummary",
+	res, err := http.Post(testSidecarUrl+"/getsummary",
 		"application/json",
 		strings.NewReader(""))
 	if err != nil {
@@ -224,16 +211,17 @@ func callTestSummary() bool {
 	if res.StatusCode != http.StatusOK {
 		b, _ := ioutil.ReadAll(res.Body)
 
-		displayRedText(fmt.Sprintf("Received no \"200 OK\" from put sidecar event: %q",
+		displayError(fmt.Sprintf("Received no \"200 OK\" from put sidecar event: %q",
 			strings.TrimSuffix(string(b), "\n")))
 
 	}
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		displayError("failed to read sendTestFilterEvent response from test sidecar server", err)
+		return false
 	}
 
 	//displayGreenText(string(decodeJsonBytes(body)))
@@ -250,25 +238,27 @@ func callTestSummary() bool {
 func callTestEvents() bool {
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/getevents",
+	res, err := http.Post(testSidecarUrl+"/getevents",
 		"application/json",
 		strings.NewReader(""))
 	if err != nil {
 		displayError("failed to get test events from sidecar", err)
+		return false
 	}
 	if res.StatusCode != http.StatusOK {
 		b, _ := ioutil.ReadAll(res.Body)
 
-		displayRedText(fmt.Sprintf("Received no \"200 OK\" from get sidecar events: %q",
+		displayError(fmt.Sprintf("Received no \"200 OK\" from get sidecar events: %q",
 			strings.TrimSuffix(string(b), "\n")))
-
+		return false
 	}
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		displayError("failed to read callTestEvents response from test sidecar server", err)
+		return false
 	}
 
 	//displayGreenText(string(decodeJsonBytes(body)))
@@ -287,12 +277,12 @@ func callTestEvents() bool {
 func executeTestCommand() bool {
 
 	if len(currentTestRun.Commands) == 0 {
-		displayError("empty test run queue")
+		logYellow("empty test run queue")
 		testend = true
 		return false
 	}
 	if strings.Split(currentTestRun.Commands[0], " ")[0] != name {
-		displayError("command for another peer")
+		logYellow("command for another peer")
 		return false
 	}
 
@@ -313,7 +303,7 @@ func executeTestCommand() bool {
 func removeTest() bool {
 
 	// Send request to service
-	res, err := http.Post(TestUrl+"/removecommand",
+	res, err := http.Post(testSidecarUrl+"/removecommand",
 		"application/x-www-form-urlencoded",
 		strings.NewReader(fmt.Sprintf("%s",
 			name)))
@@ -324,7 +314,7 @@ func removeTest() bool {
 	if res.StatusCode != http.StatusOK {
 		b, _ := ioutil.ReadAll(res.Body)
 
-		displayRedText(fmt.Sprintf("Received no \"200 OK\" from test sidecar get: %q",
+		displayError(fmt.Sprintf("Received no \"200 OK\" from test sidecar get: %q",
 			strings.TrimSuffix(string(b), "\n")))
 		return false
 

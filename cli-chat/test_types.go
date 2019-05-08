@@ -49,13 +49,11 @@ type TestSummary struct {
 }
 
 var (
-	currentTestRun    = TestRun{}
-	currentTestResult = TestResult{}
+	currentTestRun = TestRun{}
 
 	currentTestEventFilter  = TestEventFilter{}
 	currentTestEventFilters = make([]TestEventFilter, 0)
 
-	currentTestSummary   = TestSummary{}
 	currentTestSummaries = make([]TestSummary, 0)
 
 	currentSourceFilter = TestSourceFilter{}
@@ -63,9 +61,9 @@ var (
 		"messagesView": make([]TestSourceFilter, 0),
 	}
 
-	testCommand string
-	testend     = false
+	testend = false
 
-	// Todo: Use a environment variable
-	TestUrl string = "http://localhost:8081"
+	testSidecarUrl string
+
+	testName string
 )

@@ -1,9 +1,12 @@
 package main
 
-// Todo: Use environment variables
+var (
+	// Directory for the test data
+	testDir, currentTestDir string
 
-// Directory for the test data
-var testDir string = "/Users/stefan/go/src/github.com/stefanhans/programming-reactive-systems-in-go/sidecar-test"
+	// Portnumber the service is listening
+	testPort string
+)
 
 // TestRun is the struct for the multi peer test
 type TestRun struct {
@@ -37,7 +40,7 @@ type TestEventFilter struct {
 	NumReceivedEvents uint8  `json:"num_received_events"`
 }
 
-type TestSummary struct {
+type TestEvaluation struct {
 	ID      string `json:"id,omitempty"`
 	Name    string `json:"name,omitempty"`
 	Peer    string `json:"peer,omitempty"`
@@ -56,6 +59,6 @@ var (
 
 	currentTestResult = TestResult{}
 
-	currentTestSummary   = TestSummary{}
-	currentTestSummaries = make([]TestSummary, 0)
+	currentTestEvaluation = TestEvaluation{}
+	currentTestSummary    = make([]TestEvaluation, 0)
 )
