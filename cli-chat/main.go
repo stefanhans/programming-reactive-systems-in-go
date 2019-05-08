@@ -3,13 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/jroimartin/gocui"
 	"log"
 	"net/url"
 	"os"
 	"strings"
 	"time"
-
-	"github.com/jroimartin/gocui"
 )
 
 var (
@@ -24,7 +23,7 @@ var (
 	testfilename *string
 )
 
-func handleFlags() {
+func checkCommandlineArgs() {
 
 	// test switches on testing
 	testMode = flag.Bool("test", false,
@@ -53,9 +52,70 @@ func handleFlags() {
 
 }
 
+func doTesting() {
+
+	// http://localhost:8081
+	testSidecarUrl = os.Getenv("TEST_SIDECAR_SERVER")
+	_, err := url.ParseRequestURI(testSidecarUrl)
+	if err != nil {
+		fmt.Printf("environment variable TEST_SIDECAR_SERVER is not a valid URL")
+		return
+	}
+
+	if *testfilename != "" {
+		testName = strings.Split(*testfilename, ".")[0]
+	} else {
+		// Todo: testing with multiple tests
+		testName = "testqueue"
+	}
+
+	cmdLogging(strings.Split(fmt.Sprintf("on %s.log", testName), " "))
+
+	if !initTest(testName) {
+		displayError("test load failed")
+	}
+
+	for !testend {
+
+		if executeTestCommand() {
+
+			logGreen("command execution successful")
+
+			sendTestCommandResult("OK")
+
+			if removeTest() {
+				logGreen("command remove successful")
+			} else {
+				logYellow("command remove error")
+			}
+		} else {
+			logYellow("command execution failed")
+		}
+
+		if !refreshTest() {
+			displayError("command load failed")
+			break
+		}
+
+		if len(currentTestRun.Commands) != 0 && strings.Split(currentTestRun.Commands[0], " ")[0] == name {
+			continue
+		}
+
+		time.Sleep(time.Second * 1)
+	}
+
+	displayGreenText(fmt.Sprintf("Test %s finished", currentTestRun.ID))
+
+	if !prepareTestSummary() {
+		displayError("test summary preparation failed")
+	}
+
+	cmdLogging([]string{"off"})
+}
+
 func main() {
 
-	handleFlags()
+	checkCommandlineArgs()
 
 	// Start logging to specified or default logfile
 	file, err := startLogging(*logfile)
@@ -90,64 +150,7 @@ func main() {
 	}()
 
 	if *testMode {
-
-		// http://localhost:8081
-		testSidecarUrl = os.Getenv("TEST_SIDECAR_SERVER")
-		_, err := url.ParseRequestURI(testSidecarUrl)
-		if err != nil {
-			fmt.Printf("environment variable TEST_SIDECAR_SERVER is not a valid URL")
-			return
-		}
-
-		if *testfilename != "" {
-			testName = strings.Split(*testfilename, ".")[0]
-		} else {
-			// Todo: testing with multiple tests
-			testName = "testqueue"
-		}
-
-		cmdLogging(strings.Split(fmt.Sprintf("on %s.log", testName), " "))
-
-		if !initTest(testName) {
-			displayError("test load failed")
-		}
-
-		for !testend {
-
-			if executeTestCommand() {
-
-				logGreen("command execution successful")
-
-				sendTestCommandResult("OK")
-
-				if removeTest() {
-					logGreen("command remove successful")
-				} else {
-					logYellow("command remove error")
-				}
-			} else {
-				logYellow("command execution failed")
-			}
-
-			if !refreshTest() {
-				displayError("command load failed")
-				break
-			}
-
-			if len(currentTestRun.Commands) != 0 && strings.Split(currentTestRun.Commands[0], " ")[0] == name {
-				continue
-			}
-
-			time.Sleep(time.Second * 1)
-		}
-
-		displayGreenText(fmt.Sprintf("Test %s finished", currentTestRun.ID))
-
-		if !prepareTestSummary() {
-			displayError("test summary preparation failed")
-		}
-
-		cmdLogging([]string{"off"})
+		doTesting()
 	} else {
 		if !executeCommand("init") {
 			displayError("could not initialize chat")
