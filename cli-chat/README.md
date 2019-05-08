@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat?status.svg)](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat)
+
 ###Start the chat interactively
 
 **Create your memberlist node**

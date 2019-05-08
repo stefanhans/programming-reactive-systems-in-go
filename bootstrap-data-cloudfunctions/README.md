@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-cloudfunctions?status.svg)](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-cloudfunctions)
+
 ### The Cloud Functions Is Already Deployed
 
 Please go to **Test Cloud Functions API** to the end of this README.

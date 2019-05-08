@@ -1,3 +1,6 @@
+
+[![GoDoc](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api?status.svg)](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api)
+
 We test the API against two different backend services:
 
 - a webserver running on localhost:8080

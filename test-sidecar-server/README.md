@@ -1,0 +1,1 @@
+[![GoDoc](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/test-sidecar-server?status.svg)](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/test-sidecar-server)
