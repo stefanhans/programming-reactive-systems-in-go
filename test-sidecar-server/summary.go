@@ -8,6 +8,36 @@ import (
 	"strings"
 )
 
+func saveTestJsonData(w http.ResponseWriter) {
+
+	// Marshal array of struct
+	testEventFiltersJson, err := json.MarshalIndent(currentTestEventFilters, "", " ")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write marshal currentTestEventFilter: %s", err),
+			http.StatusInternalServerError)
+	}
+
+	err = ioutil.WriteFile(fmt.Sprintf("%s/testEventFilters.json", currentTestDir),
+		append(testEventFiltersJson, byte('\n')), 0600)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write testeventfilters to test directory: %s", err),
+			http.StatusInternalServerError)
+	}
+
+	currentTestSummaryJson, err := json.MarshalIndent(currentTestSummary, "", " ")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to marshal currentTestSummary: %s", err),
+			http.StatusInternalServerError)
+	}
+
+	err = ioutil.WriteFile(fmt.Sprintf("%s/testSummary.json", currentTestDir),
+		append(currentTestSummaryJson, byte('\n')), 0600)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write testsummary to test directory: %s", err),
+			http.StatusInternalServerError)
+	}
+}
+
 // PrepareTestSummary prepares the summary after the test run.
 // It saves the data of the run, the filters, and the summary in JSON
 // files in the directory of the test run.
@@ -102,32 +132,7 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Marshal array of struct
-	testEventFiltersJson, err := json.MarshalIndent(currentTestEventFilters, "", " ")
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to write marshal currentTestEventFilter: %s", err),
-			http.StatusInternalServerError)
-	}
-
-	err = ioutil.WriteFile(fmt.Sprintf("%s/testEventFilters.json", currentTestDir),
-		append(testEventFiltersJson, byte('\n')), 0600)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to write testeventfilters to test directory: %s", err),
-			http.StatusInternalServerError)
-	}
-
-	currentTestSummaryJson, err := json.MarshalIndent(currentTestSummary, "", " ")
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to marshal currentTestSummary: %s", err),
-			http.StatusInternalServerError)
-	}
-
-	err = ioutil.WriteFile(fmt.Sprintf("%s/testSummary.json", currentTestDir),
-		append(currentTestSummaryJson, byte('\n')), 0600)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("failed to write testsummary to test directory: %s", err),
-			http.StatusInternalServerError)
-	}
+	saveTestJsonData(w)
 
 	_, err = fmt.Fprintf(w, "")
 	if err != nil {

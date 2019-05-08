@@ -302,7 +302,7 @@ func initApplication(arguments []string) bool {
 		return false
 	}
 	id := uuid.NewUUID().String()
-	conf.Name = hostname + "-" + name + "-" + id
+	conf.Name = name + "-" + hostname + "-" + id
 
 	mlogfile = "mlist" + name + ".log"
 

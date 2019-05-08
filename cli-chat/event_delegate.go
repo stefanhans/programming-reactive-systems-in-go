@@ -25,7 +25,7 @@ func (d *eventDelegate) NotifyLeave(node *memberlist.Node) {
 	logYellow(fmt.Sprintf("NotifyLeave: %v %v\n", node.Name, node.Address()))
 
 	displayYelloText(fmt.Sprintf("<left> %s has left",
-		strings.Split(node.Name, "-")[3]))
+		strings.Split(node.Name, "-")[0]))
 
 	log.Printf("Ping chat member %q to decide removal from chat\n", node.Name)
 
