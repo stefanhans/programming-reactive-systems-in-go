@@ -9,23 +9,29 @@ type TestRun struct {
 	Status      string   `json:"status,omitempty"`
 }
 
+// TestSourceFilter is used to send filter to the service via 'testfilter'
 type TestSourceFilter struct {
 	Filter            string `json:"filter,omitempty"`
 	NumExpectedEvents uint8  `json:"num_events,omitempty"`
 }
 
+// CommandResult is used to send the result of a command and
+// will be stored in the current test result.
 type CommandResult struct {
 	Peer    string `json:"peer,omitempty"`
 	Status  string `json:"status,omitempty"`
 	Comment string `json:"comment,omitempty"`
 }
 
+// TestResult stores the results of a test run.
 type TestResult struct {
 	ID             string `json:"id,omitempty"`
 	Name           string `json:"name,omitempty"`
 	CommandResults []*CommandResult
 }
 
+// TestEventFilter stores information about defined filters
+// and the matching events
 type TestEventFilter struct {
 	ID                string `json:"id,omitempty"`
 	Name              string `json:"name,omitempty"`
@@ -37,6 +43,7 @@ type TestEventFilter struct {
 	NumReceivedEvents uint8  `json:"num_received_events"`
 }
 
+// TestSummary stores the summary of a test run.
 type TestSummary struct {
 	ID      string `json:"id,omitempty"`
 	Name    string `json:"name,omitempty"`

@@ -15,6 +15,7 @@ type Peer struct {
 	Timestamp string `json:"timestamp,omitempty"` // Unix time in seconds
 }
 
+// Config has the configuration of the bootstrap service.
 type Config struct {
 	MaxPeers            int `json:"maxpeers,omitempty"`            // Max number of bootstrap peers to be saved
 	MinRefillCandidates int `json:"minrefillcandidates,omitempty"` // Number used to decide peer send refill request

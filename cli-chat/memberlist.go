@@ -129,28 +129,29 @@ func saveMemberlistConfiguration(arguments []string) bool {
 	if err != nil {
 		displayError("could not marshall configuration", err)
 		return false
-	} else {
-		var filename string
-
-		if len(arguments) > 0 {
-			filename = arguments[0]
-		} else {
-			filename = conf.Name + ".json"
-		}
-
-		//Formated JSON
-		var out bytes.Buffer
-		err = json.Indent(&out, byteArray, "", "\t")
-
-		// Replace '{}' with 'null' in JSON string
-		str := strings.Replace(string(out.Bytes()), "{}", "null", -1)
-
-		err = ioutil.WriteFile(filename, append([]byte(str), byte('\n')), 0600)
-		if err != nil {
-			displayError("could not write to file", err)
-		}
-		log.Printf("%s\n", filename)
 	}
+
+	var filename string
+
+	if len(arguments) > 0 {
+		filename = arguments[0]
+	} else {
+		filename = conf.Name + ".json"
+	}
+
+	//Formated JSON
+	var out bytes.Buffer
+	err = json.Indent(&out, byteArray, "", "\t")
+
+	// Replace '{}' with 'null' in JSON string
+	str := strings.Replace(string(out.Bytes()), "{}", "null", -1)
+
+	err = ioutil.WriteFile(filename, append([]byte(str), byte('\n')), 0600)
+	if err != nil {
+		displayError("could not write to file", err)
+	}
+	log.Printf("%s\n", filename)
+
 	return true
 }
 
