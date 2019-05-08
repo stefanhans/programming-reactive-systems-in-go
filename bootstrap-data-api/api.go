@@ -24,6 +24,7 @@ type Peer struct {
 	Timestamp string `json:"timestamp,omitempty"` // Unix time in seconds
 }
 
+// Config has the configuration of the bootstrap service.
 type Config struct {
 	MaxPeers            int `json:"maxpeers,omitempty"`            // Max number of bootstrap peers to be saved
 	MinRefillCandidates int `json:"minrefillcandidates,omitempty"` // Number used to decide peer send refill request
@@ -80,6 +81,8 @@ func Create(peer *Peer) (*BootstrapDataAPI, error) {
 	}, nil
 }
 
+// Join sends the data of a peer to the bootstrap service to join
+// and returns the current bootstrap data.
 func (api *BootstrapDataAPI) Join() *BootstrapData {
 
 	// Send request to service
@@ -117,6 +120,8 @@ func (api *BootstrapDataAPI) Join() *BootstrapData {
 	return &bootstrapData
 }
 
+// Leave sends the id of a peer which wants to leave the list
+// and returns the current bootstrap data.
 func (api *BootstrapDataAPI) Leave(id string) *BootstrapData {
 
 	// Send request to service
@@ -148,6 +153,8 @@ func (api *BootstrapDataAPI) Leave(id string) *BootstrapData {
 	return &bootstrapData
 }
 
+// Refill sends the data of a peer to the bootstrap service to fill a possible gap
+// and returns the current bootstrap data.
 func (api *BootstrapDataAPI) Refill() *BootstrapData {
 
 	// Send request to service
@@ -179,6 +186,7 @@ func (api *BootstrapDataAPI) Refill() *BootstrapData {
 	return &bootstrapData
 }
 
+// List returns the current bootstrap data.
 func (api *BootstrapDataAPI) List() *BootstrapData {
 
 	// Send request to service
@@ -210,6 +218,8 @@ func (api *BootstrapDataAPI) List() *BootstrapData {
 	return &bootstrapData
 }
 
+// Reset resets the bootstrap service
+// and returns the bootstrap data of the empty list.
 func (api *BootstrapDataAPI) Reset() *BootstrapData {
 
 	// Send request to service
@@ -241,6 +251,7 @@ func (api *BootstrapDataAPI) Reset() *BootstrapData {
 	return &bootstrapData
 }
 
+// UpdateConfig updates the configuration of the service.
 func (api *BootstrapDataAPI) UpdateConfig() (*BootstrapData, error) {
 
 	// Send request to service
