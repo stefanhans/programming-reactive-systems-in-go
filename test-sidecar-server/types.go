@@ -17,18 +17,23 @@ type TestRun struct {
 	Status      string   `json:"status,omitempty"`
 }
 
+// CommandResult is used to receive the result of a command and
+// will be stored in the current test result.
 type CommandResult struct {
 	Peer   string `json:"peer,omitempty"`
 	Status string `json:"status,omitempty"`
 	Data   string `json:"data"`
 }
 
+// TestResult stores the results of a test run.
 type TestResult struct {
 	ID             string `json:"id,omitempty"`
 	Name           string `json:"name,omitempty"`
 	CommandResults []*CommandResult
 }
 
+// TestEventFilter stores information about defined filters
+// and their matching events.
 type TestEventFilter struct {
 	ID                string `json:"id,omitempty"`
 	Name              string `json:"name,omitempty"`
@@ -40,6 +45,8 @@ type TestEventFilter struct {
 	NumReceivedEvents uint8  `json:"num_received_events"`
 }
 
+// TestEvaluation stores the evaluation of one command or event of the test run.
+// An array of these test evaluations is the current test summary.
 type TestEvaluation struct {
 	ID      string `json:"id,omitempty"`
 	Name    string `json:"name,omitempty"`

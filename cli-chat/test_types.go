@@ -31,7 +31,7 @@ type TestResult struct {
 }
 
 // TestEventFilter stores information about defined filters
-// and the matching events
+// and their matching events.
 type TestEventFilter struct {
 	ID                string `json:"id,omitempty"`
 	Name              string `json:"name,omitempty"`
