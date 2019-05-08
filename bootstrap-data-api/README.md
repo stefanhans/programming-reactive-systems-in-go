@@ -1,4 +1,5 @@
-
+[![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/stefanhans/programming-reactive-systems-in-go/blob/master/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api)](https://goreportcard.com/report/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api)
 [![GoDoc](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api?status.svg)](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api)
 
 We test the API against two different backend services:
