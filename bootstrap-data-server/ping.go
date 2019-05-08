@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Ping sends back an "OK".
 func Ping(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid off warning

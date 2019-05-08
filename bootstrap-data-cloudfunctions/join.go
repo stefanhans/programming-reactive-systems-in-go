@@ -12,7 +12,7 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-// Join get information of the new member via http and stores it in Firestore
+// Join gets information of the new member via http and stores it in Firestore
 func Join(w http.ResponseWriter, r *http.Request) {
 
 	// Sets your Google Cloud Platform project ID.

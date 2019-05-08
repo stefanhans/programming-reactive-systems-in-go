@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// List sends back all bootstrap data from the JSON file.
 func List(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid off warning

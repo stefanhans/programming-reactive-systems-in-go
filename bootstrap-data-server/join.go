@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Join gets information of the new member via http and stores it in a JSON file.
 func Join(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body

@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+// ConfigUpdate  update the configuration of the bootstrap service.
+// It is only for manual administration via curl and not used by the API.
 func ConfigUpdate(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body

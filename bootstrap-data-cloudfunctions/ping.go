@@ -9,6 +9,7 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
+// Ping sends back an "OK".
 func Ping(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid of warnings

@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Reset deletes all bootstrap peers and writes the data to the JSON file.
 func Reset(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid off warning

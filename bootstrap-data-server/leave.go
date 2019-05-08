@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Leave gets information of the leaving peer via http and deletes it in the JSON file.
 func Leave(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body

@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+// Refill checks to add the requesting peer in the list of bootstrap peers.
+// If a bootstrap peer has left, other peers do ask to fill the gap.
+// Criterium is the number of needed peers, and,
+// the peer with the oldest timestamp will succeed then.
 func Refill(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body

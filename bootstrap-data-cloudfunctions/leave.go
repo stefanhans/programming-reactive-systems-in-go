@@ -12,7 +12,7 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-// Leave get information of the leaving peer via http and deletes it in Firestore
+// Leave gets information of the leaving peer via http and deletes it in Firestore.
 func Leave(w http.ResponseWriter, r *http.Request) {
 
 	// Sets your Google Cloud Platform project ID.

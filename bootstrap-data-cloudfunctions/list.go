@@ -9,7 +9,7 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-// List returns all bootstrap data from Firestore
+// List sends back all bootstrap data from Firestore
 func List(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid of warnings
