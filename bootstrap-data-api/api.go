@@ -1,4 +1,4 @@
-package bootstrap_data_api
+package bootstrapApi
 
 import (
 	"encoding/json"
