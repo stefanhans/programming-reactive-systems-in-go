@@ -24,6 +24,12 @@ func Leave(w http.ResponseWriter, r *http.Request) {
 	// Read bootstrap peers in JSON from file
 	mtx.Lock()
 	b, err := ioutil.ReadFile(collectionFileName)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to read bootstrap data from %q: %s",
+			collectionFileName, err),
+			http.StatusInternalServerError)
+		return
+	}
 	mtx.Unlock()
 
 	// Unmarshall JSON
