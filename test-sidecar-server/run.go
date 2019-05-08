@@ -11,6 +11,9 @@ import (
 	"github.com/pborman/uuid"
 )
 
+// InitRun creates a new test run according to a given name.
+// It reads the appropriate command file, creates a new test directory,
+// and send the test run back
 func InitRun(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body
@@ -86,6 +89,8 @@ func InitRun(w http.ResponseWriter, r *http.Request) {
 curl -d "testqueue" http://localhost:8081/init
 */
 
+// GetCommand sends back the current test run.
+// In cooperation with RemoveCommand does it provide the next command in the queue.
 func GetCommand(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid of warning
@@ -109,6 +114,8 @@ func GetCommand(w http.ResponseWriter, r *http.Request) {
 curl http://localhost:8081/get
 */
 
+// RemoveCommand removes the last command from the queue.
+// In cooperation with GetCommand does it provide the next command in the queue.
 func RemoveCommand(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body
@@ -149,6 +156,7 @@ func RemoveCommand(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetRun sends back the data of the current test run
 func GetRun(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid of warning

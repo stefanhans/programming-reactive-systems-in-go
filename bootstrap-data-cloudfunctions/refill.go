@@ -1,4 +1,4 @@
-package bootstrap_data_cloudfunctions
+package bootstrap
 
 import (
 	"context"

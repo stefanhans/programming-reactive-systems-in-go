@@ -14,6 +14,7 @@ func decodeJsonBytes(txt []byte) []byte {
 	return bytes.Replace(txt, []byte(`\u0026`), []byte("&"), -1)
 }
 
+// PutTestEvent receives data of a filtered event
 func PutTestEvent(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body
@@ -78,6 +79,7 @@ curl -d "testID testname alice OK" http://localhost:8081/putresult
 curl -d "testID testname alice OK just an comment" http://localhost:8081/putresult
 */
 
+// GetTestEvents sends back all filtered events
 func GetTestEvents(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid of warning

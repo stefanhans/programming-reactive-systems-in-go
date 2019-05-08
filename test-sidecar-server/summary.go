@@ -8,6 +8,9 @@ import (
 	"strings"
 )
 
+// PrepareTestSummary prepares the summary after the test run.
+// It saves the data of the run, the filters, and the summary in JSON
+// files in the directory of the test run.
 func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body
@@ -137,6 +140,7 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 curl -d "alice" http://localhost:8081/preparesummary
 */
 
+// GetTestSummary sends back the summary of the last test run.
 func GetTestSummary(w http.ResponseWriter, r *http.Request) {
 
 	// Get rid of warning

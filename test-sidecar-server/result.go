@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// PutTestResult receives the result of a test command
 func PutTestResult(w http.ResponseWriter, r *http.Request) {
 
 	// Read the request body
@@ -68,6 +69,7 @@ curl -d "testID testname alice OK" http://localhost:8081/putresult
 curl -d "testID testname alice OK just an comment" http://localhost:8081/putresult
 */
 
+// GetTestResults sends back all test results
 func GetTestResults(w http.ResponseWriter, r *http.Request) {
 
 	mtx.Lock()

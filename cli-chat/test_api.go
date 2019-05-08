@@ -107,7 +107,8 @@ func sendTestCommandResult(status string) bool {
 	// Send request to service
 	res, err := http.Post(testSidecarUrl+"/putresult",
 		"application/x-www-form-urlencoded",
-		strings.NewReader(fmt.Sprintf("%s %s %s %s %s", currentTestRun.ID, currentTestRun.Name, name,
+		strings.NewReader(fmt.Sprintf("%s %s %s %s %s",
+			currentTestRun.ID, currentTestRun.Name, name,
 			status, strings.TrimSpace(strings.TrimLeft(currentTestRun.Commands[0], name)))))
 	if err != nil {
 		displayError("failed to post tests request to test sidecar server", err)
