@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	bootstrap_data_api "github.com/stefanhans/cli-chat/bootstrap-data-api"
+	bootstrap_data_api "github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api"
 )
 
 var (

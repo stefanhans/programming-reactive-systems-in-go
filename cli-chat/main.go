@@ -24,7 +24,7 @@ var (
 	testfilename *string
 )
 
-func main() {
+func handleFlags() {
 
 	// test switches on testing
 	testMode = flag.Bool("test", false,
@@ -50,6 +50,12 @@ func main() {
 
 	name = flag.Arg(0)
 	prompt = fmt.Sprintf("<%s> ", name)
+
+}
+
+func main() {
+
+	handleFlags()
 
 	// Start logging to specified or default logfile
 	file, err := startLogging(*logfile)

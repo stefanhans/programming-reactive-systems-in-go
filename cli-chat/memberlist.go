@@ -142,6 +142,9 @@ func saveMemberlistConfiguration(arguments []string) bool {
 	//Formated JSON
 	var out bytes.Buffer
 	err = json.Indent(&out, byteArray, "", "\t")
+	if err != nil {
+		displayError("could not indent", err)
+	}
 
 	// Replace '{}' with 'null' in JSON string
 	str := strings.Replace(string(out.Bytes()), "{}", "null", -1)

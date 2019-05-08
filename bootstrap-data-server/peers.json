@@ -5,23 +5,23 @@
     "numpeers": 2
   },
   "Peers": {
-    "bc6b9c61-db79-4e6d-b9c6-6b53cf4df784": {
-      "id": "bc6b9c61-db79-4e6d-b9c6-6b53cf4df784",
-      "name": "Stefans-MacBook-Pro.local-alice-b4045446-718c-11e9-be4d-acde48001122",
+    "95d68147-e7b4-49ff-afa2-f669df55f8db": {
+      "id": "95d68147-e7b4-49ff-afa2-f669df55f8db",
+      "name": "Stefans-MBP-alice-30396426-71af-11e9-acbf-acde48001122",
       "ip": "127.0.0.1",
-      "port": "57896",
+      "port": "52333",
       "protocol": "tcp",
       "status": "0",
-      "timestamp": "1557318474"
+      "timestamp": "1557333285"
     },
-    "c3e72373-e118-4c32-bb64-850eebd806c8": {
-      "id": "c3e72373-e118-4c32-bb64-850eebd806c8",
-      "name": "Stefans-MacBook-Pro.local-bob-b641be42-718c-11e9-a06e-acde48001122",
+    "ba989125-b58b-46aa-ba32-c418e23dada4": {
+      "id": "ba989125-b58b-46aa-ba32-c418e23dada4",
+      "name": "Stefans-MBP-bob-31195a36-71af-11e9-8dfd-acde48001122",
       "ip": "127.0.0.1",
-      "port": "57908",
+      "port": "52342",
       "protocol": "tcp",
       "status": "0",
-      "timestamp": "1557318477"
+      "timestamp": "1557333286"
     }
   }
 }
