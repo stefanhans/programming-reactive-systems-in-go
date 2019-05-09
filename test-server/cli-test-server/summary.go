@@ -61,9 +61,9 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 
 	testPeer := arguments[0]
 
-	for _, currentTestSummary := range currentTestSummary {
-		if currentTestSummary.Peer == testPeer {
-			http.Error(w, fmt.Sprintf("error: summary of %s already processed\n", testPeer),
+	for _, currentTestEval := range currentTestSummary {
+		if currentTestEval.Peer == testPeer {
+			http.Error(w, fmt.Sprintf("error: summary of %s already processed", testPeer),
 				http.StatusInternalServerError)
 			return
 		}
@@ -133,6 +133,8 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 	}
 
 	saveTestJsonData(w)
+
+	currentTestRun.ID = ""
 
 	_, err = fmt.Fprintf(w, "")
 	if err != nil {

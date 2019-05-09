@@ -1,17 +1,7 @@
 {
   "Config": {
     "maxpeers": 2,
-    "minrefillcandidates": 2,
-    "numpeers": 1
+    "minrefillcandidates": 2
   },
-  "Peers": {
-    "0578001e-4c3b-4c8d-b376-ca3d087af4b4": {
-      "id": "0578001e-4c3b-4c8d-b376-ca3d087af4b4",
-      "name": "charly-Stefans-MBP-636b75c0-724d-11e9-ab00-acde48001122",
-      "ip": "127.0.0.1",
-      "port": "65218",
-      "protocol": "tcp",
-      "timestamp": "1557401231"
-    }
-  }
+  "Peers": {}
 }

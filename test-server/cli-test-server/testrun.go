@@ -58,6 +58,11 @@ func InitRun(w http.ResponseWriter, r *http.Request) {
 		currentTestRun.Status = "READY"
 	}
 
+	// Reset the test run
+	currentTestEventFilters = nil
+	currentTestResult = TestResult{}
+	currentTestSummary = nil
+
 	// Marshal array of struct
 	testRunJson, err := json.MarshalIndent(currentTestRun, "", " ")
 	if err != nil {

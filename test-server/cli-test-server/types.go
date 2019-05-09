@@ -65,5 +65,5 @@ var (
 	currentTestResult = TestResult{}
 
 	currentTestEvaluation = TestEvaluation{}
-	currentTestSummary    = make([]TestEvaluation, 0)
+	currentTestSummary    []TestEvaluation
 )
