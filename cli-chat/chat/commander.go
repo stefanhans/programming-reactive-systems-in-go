@@ -1,4 +1,4 @@
-package main
+package chat
 
 import (
 	"bufio"
@@ -13,7 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/hashicorp/memberlist"
 	"github.com/pborman/uuid"
-	"github.com/stefanhans/programming-reactive-systems-in-go/cli-chat/chat-member"
+	"github.com/stefanhans/programming-reactive-systems-in-go/cli-chat/chat/chat-member"
 )
 
 // Execute a command specified by the argument string

@@ -1,4 +1,4 @@
-package main
+package chat
 
 import (
 	"bufio"
@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/stefanhans/programming-reactive-systems-in-go/cli-chat/chat-member"
+	"github.com/stefanhans/programming-reactive-systems-in-go/cli-chat/chat/chat-member"
 )
 
 var (

@@ -1,4 +1,4 @@
-package main
+package chat
 
 // TestRun is the struct for the multi peer test
 type TestRun struct {

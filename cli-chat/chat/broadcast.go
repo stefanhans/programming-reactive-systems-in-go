@@ -1,4 +1,4 @@
-package main
+package chat
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/hashicorp/memberlist"
-	"github.com/stefanhans/programming-reactive-systems-in-go/cli-chat/chat-member"
+	"github.com/stefanhans/programming-reactive-systems-in-go/cli-chat/chat/chat-member"
 )
 
 // Broadcast is something that can be broadcasted via gossip to
