@@ -46,7 +46,7 @@ Now, you can start step by step or play as wanted.
 
 **Join the chat and say hi**
 
-- `chatjoin` start chat listener and join the chat
+- `chatstart` start chat listener and join the chat
 - `msg hi` send a message to all chat members
 
 

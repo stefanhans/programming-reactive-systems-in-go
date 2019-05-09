@@ -1,7 +1,11 @@
-package main
+package server
+
+import "sync"
 
 // File for the collection
 var collectionFileName = "peers.json"
+
+var mtx sync.RWMutex
 
 // Peer is the struct for the collection
 type Peer struct {
