@@ -1,7 +1,27 @@
 {
   "Config": {
     "maxpeers": 2,
-    "minrefillcandidates": 2
+    "minrefillcandidates": 2,
+    "numpeers": 2
   },
-  "Peers": {}
+  "Peers": {
+    "80527465-36c6-40e2-9b8f-57c9c74f9b72": {
+      "id": "80527465-36c6-40e2-9b8f-57c9c74f9b72",
+      "name": "alice-Stefans-MBP-0f2b4c1e-723a-11e9-b98b-acde48001122",
+      "ip": "127.0.0.1",
+      "port": "56574",
+      "protocol": "tcp",
+      "status": "0",
+      "timestamp": "1557392929"
+    },
+    "df27a628-6df9-4b5c-831d-0faebbec8e71": {
+      "id": "df27a628-6df9-4b5c-831d-0faebbec8e71",
+      "name": "bob-Stefans-MBP-107b314c-723a-11e9-a51b-acde48001122",
+      "ip": "127.0.0.1",
+      "port": "56586",
+      "protocol": "tcp",
+      "status": "0",
+      "timestamp": "1557392932"
+    }
+  }
 }
