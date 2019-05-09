@@ -10,7 +10,7 @@ usage: 	 ./cli-chat [-test [-testfile=<filename>]] [-logfile=<filename> | -logfi
 
 ### Start the chat normally
 
-Providing only your nickname you start the chat and all the startup is done silently.
+Providing only your nickname the chat starts all up silently.
 
 ```
 ./cli-chat alice
@@ -19,13 +19,13 @@ Providing only your nickname you start the chat and all the startup is done sile
 
 ### Start the chat from scratch interactively
 
-To start without any initialization you use the test mode with an empty test.
+To start without any initialization, you use the test mode with an empty test.
 
 ```
 ./cli-chat -test -testfile=empty.cmd alice
 ```
 
-Now, you have to start step by step.
+Now, you can start step by step or play as wanted.
 
 
 **Create your memberlist node**
