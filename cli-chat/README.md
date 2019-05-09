@@ -2,7 +2,31 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat)](https://goreportcard.com/report/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat)
 [![GoDoc](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat?status.svg)](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat)
 
-###Start the chat interactively
+
+```
+usage: 	 ./cli-chat [-test [-testfile=<filename>]] [-logfile=<filename> | -logfile=/dev/null] <name>
+```
+
+
+### Start the chat normally
+
+Providing only your nickname you start the chat and all the startup is done silently.
+
+```
+./cli-chat alice
+```
+
+
+### Start the chat from scratch interactively
+
+To start without any initialization you use the test mode with an empty test.
+
+```
+./cli-chat -test -testfile=empty.cmd alice
+```
+
+Now, you have to start step by step.
+
 
 **Create your memberlist node**
 
@@ -25,4 +49,16 @@
 
 - `chatjoin` start chat listener and join the chat
 - `msg hi` send a message to all chat members
+
+
+**See all available commands**
+
+- `<tab><tab>` lists all commands using code completion
+- `help` or other not existing command shows commands and descriptions
+
+
+**Leave the cli-tool**
+
+- `quit`
+
 

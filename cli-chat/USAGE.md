@@ -1,3 +1,5 @@
+This information is deprecated
+
 ```
 bootstrapjoin
 	 bootstrapjoin joins calling peer to bootstrap peers
