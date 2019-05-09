@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	cli_test_server.Run()
+	server.Run()
 }

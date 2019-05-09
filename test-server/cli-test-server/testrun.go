@@ -1,4 +1,4 @@
-package cli_test_server
+package server
 
 import (
 	"encoding/json"
