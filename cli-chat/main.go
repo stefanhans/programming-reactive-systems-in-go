@@ -66,7 +66,7 @@ func doTesting() {
 		testName = strings.Split(*testfilename, ".")[0]
 	} else {
 		// Todo: testing with multiple tests
-		testName = "testqueue"
+		testName = "default"
 	}
 
 	cmdLogging(strings.Split(fmt.Sprintf("on %s.log", testName), " "))
