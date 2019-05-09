@@ -17,7 +17,6 @@ func startLogging(logname string) (*os.File, error) {
 
 	// Config logging
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-	//log.SetPrefix("DEBUG: ")
 
 	if len(logname) == 0 {
 

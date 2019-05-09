@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -31,7 +32,7 @@ func initTest(testName string) bool {
 		return false
 
 	}
-	//fmt.Printf("Received reply from Join: %v\n", res.Status)
+	log.Printf("Received reply from Join: %v\n", res.Status)
 
 	// Read response body in JSON
 	body, err := ioutil.ReadAll(res.Body)
@@ -51,13 +52,6 @@ func initTest(testName string) bool {
 	currentTestEventFilter.Name = currentTestRun.Name
 
 	displayGreenText(fmt.Sprintf("Test %s starting", currentTestRun.ID))
-
-	//testRunJson, err := json.MarshalIndent(currentTestRun, "", "  ")
-	//if err != nil {
-	//	displayError("failed to marshall test run", err)
-	//	return false
-	//}
-	//displayGreenText(string(testRunJson))
 
 	return true
 }
@@ -88,8 +82,6 @@ func refreshTest() bool {
 		displayError("failed to read tests response from test sidecar server", err)
 		return false
 	}
-
-	//displayGreenText(string(body))
 
 	currentTestRun = TestRun{}
 
@@ -122,16 +114,6 @@ func sendTestCommandResult(status string) bool {
 		return false
 	}
 
-	//// Read response body in JSON
-	//body, err := ioutil.ReadAll(res.Body)
-	//res.Body.Close()
-	//if err != nil {
-	//	displayError("failed to read tests response from test sidecar server", err)
-	//	return false
-	//}
-
-	//displayGreenText(string(body))
-
 	return true
 }
 
@@ -160,15 +142,6 @@ func sendTestFilterEvent(source string, event string) {
 			strings.TrimSuffix(string(b), "\n")))
 
 	}
-
-	//// Read response body in JSON
-	//body, err := ioutil.ReadAll(res.Body)
-	//res.Body.Close()
-	//if err != nil {
-	//	displayError("failed to read sendTestFilterEvent response from test sidecar server", err)
-	//}
-
-	//displayGreenText(string(decodeJsonBytes(body)))
 }
 
 func prepareTestSummary() bool {
@@ -187,15 +160,6 @@ func prepareTestSummary() bool {
 			strings.TrimSuffix(string(b), "\n")))
 
 	}
-
-	//// Read response body in JSON
-	//body, err := ioutil.ReadAll(res.Body)
-	//res.Body.Close()
-	//if err != nil {
-	//	displayError("failed to read sendTestFilterEvent response from test sidecar server", err)
-	//}
-	//
-	//displayGreenText(string(decodeJsonBytes(body)))
 
 	return true
 }
@@ -224,8 +188,6 @@ func callTestSummary() bool {
 		displayError("failed to read sendTestFilterEvent response from test sidecar server", err)
 		return false
 	}
-
-	//displayGreenText(string(decodeJsonBytes(body)))
 
 	err = json.Unmarshal(body, &currentTestSummaries)
 	if err != nil {
@@ -262,8 +224,6 @@ func callTestEvents() bool {
 		return false
 	}
 
-	//displayGreenText(string(decodeJsonBytes(body)))
-
 	err = json.Unmarshal(body, &currentTestEventFilters)
 	if err != nil {
 		displayError("failed to unmarshall currentTestEventFilters from test sidecar", err)
@@ -289,9 +249,6 @@ func executeTestCommand() bool {
 
 	input := "/" + strings.TrimSpace(strings.TrimLeft(currentTestRun.Commands[0], name))
 	displayText(strings.Trim(fmt.Sprintf("%s%v\n", prompt, input), "\n"))
-
-	//logBlue("??? executeCommand ???")
-	logBlue(strings.TrimLeft(input, "/"))
 
 	if executeCommand(strings.TrimLeft(input, "/")) {
 		return true

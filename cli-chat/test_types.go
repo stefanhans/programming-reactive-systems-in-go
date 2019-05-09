@@ -70,7 +70,6 @@ var (
 
 	testend = false
 
+	testName       string
 	testSidecarUrl string
-
-	testName string
 )

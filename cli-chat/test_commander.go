@@ -8,29 +8,14 @@ import (
 
 func filterEvent(source string, sourceFilter *TestSourceFilter, event string) {
 
-	for key, value := range testSourceFilters {
-
-		logBlue(fmt.Sprintf("filterEvent: %s: %v\n", key, value))
-	}
-
 	if source == "messagesView" &&
 		strings.TrimPrefix(event, sourceFilter.Filter) != event {
-
-		logBlue("TESTFILTER: " + "-----------")
-		logBlue("ID: " + currentTestEventFilter.ID)
-		logBlue("Name: " + currentTestEventFilter.Name)
-		logBlue("Peer: " + name)
-		logBlue("Source: " + source)
-		logBlue("Filter: " + sourceFilter.Filter)
-		logBlue("Event: " + event)
-		logBlue("TESTFILTER: " + "-----------")
 
 		currentTestEventFilter.Peer = name
 		currentTestEventFilter.Filter = sourceFilter.Filter
 		currentTestEventFilter.NumExpectedEvents = sourceFilter.NumExpectedEvents
 
 		sendTestFilterEvent(source, event)
-
 	}
 }
 
@@ -62,6 +47,7 @@ func executeTestEventCommand(commandFields []string) bool {
 }
 
 func addTestFilter(arguments []string) bool {
+
 	if len(arguments) < 3 {
 		displayError("not enough arguments defined to addTestFilter")
 		return false
@@ -82,8 +68,6 @@ func addTestFilter(arguments []string) bool {
 	currentSourceFilter.Filter = strings.Join(arguments[2:], " ")
 
 	testSourceFilters[arguments[0]] = append(testSourceFilters[arguments[0]], currentSourceFilter)
-
-	logBlue(fmt.Sprintf("testSourceFilters: %v\n", testSourceFilters))
 
 	return true
 }
@@ -113,8 +97,6 @@ func showTestSummary(arguments []string) bool {
 	out += fmt.Sprintf("-------------------------------------\n")
 
 	for _, test := range currentTestSummaries {
-
-		logBlue(fmt.Sprintf("test: %v\n", test))
 
 		if test.ID != testID || test.Name != testName {
 			displayError("summary inconsistent")
@@ -167,8 +149,6 @@ func showTestEvents(arguments []string) bool {
 
 	for _, filter := range currentTestEventFilters {
 
-		logBlue(fmt.Sprintf("filter: %v\n", filter))
-
 		if filter.ID != testID || filter.Name != testName {
 			displayError("event filter inconsistent")
 			return false
@@ -203,8 +183,6 @@ func showLocalTestFilters(arguments []string) bool {
 	out += fmt.Sprintf("-------------------------------------\n")
 
 	for source, filters := range testSourceFilters {
-
-		logBlue(fmt.Sprintf("%s: %v\n", source, filters))
 
 		filterStr := ""
 		for _, filter := range filters {
