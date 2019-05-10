@@ -1,7 +1,22 @@
-# Terminal Application As Isomorphic Chat
+# Terminal Chat As Isomorphic Client Application
+
+The isomorphic client combines backend and frontend as well as an interactive command line 
+with a framework for multi-client testing, and a chat as an example application.
 
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/stefanhans/programming-reactive-systems-in-go/blob/master/LICENSE)
 [![GoDoc](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat?status.svg)](https://godoc.org/github.com/stefanhans/programming-reactive-systems-in-go/cli-chat)
+
+
+The backend consists of three layers or services, respectively,
+ 
+ - the bootstrap layer with the bootstrap API 
+ - the memberlist layer using `memberlist`, an implementation of the SWIM++ protocol
+ - the application layer providing a chat as an example 
+ 
+ All layers provide a set of commands to interact with the frontend.
+ 
+ The frontend is a terminal UI with access to the commands of the backend and a simple scripting engine.
+ Additionally, it acts as a client for multi-client testing.   
 
 
 ```

@@ -1,7 +1,7 @@
-# Isomorphic Application System Prototype Environment
+# A System Prototype For Isomorphic Client Applications
 
 
-Related to the master thesis _"Programming Reactive Systems in Go"_
+This software project is related to the master thesis _"Programming Reactive Systems in Go"_
 
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/stefanhans/golang-contexting/blob/master/LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/stefanhans/programming-reactive-systems-in-go)](https://goreportcard.com/report/github.com/stefanhans/programming-reactive-systems-in-go)
