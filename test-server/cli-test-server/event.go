@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -16,6 +17,7 @@ func decodeJsonBytes(txt []byte) []byte {
 
 // PutTestEvent receives data of a filtered event
 func PutTestEvent(w http.ResponseWriter, r *http.Request) {
+	log.Printf("PutTestEvent\n")
 
 	// Read the request body
 	body, err := ioutil.ReadAll(r.Body)
@@ -81,6 +83,7 @@ curl -d "testID testname alice OK just an comment" http://localhost:8081/putresu
 
 // GetTestEvents sends back all filtered events
 func GetTestEvents(w http.ResponseWriter, r *http.Request) {
+	log.Printf("GetTestEvents\n")
 
 	// Get rid of warning
 	_ = r

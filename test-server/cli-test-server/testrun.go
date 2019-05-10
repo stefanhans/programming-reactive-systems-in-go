@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -15,6 +16,7 @@ import (
 // It reads the appropriate command file, creates a new test directory,
 // and send the test run back
 func InitRun(w http.ResponseWriter, r *http.Request) {
+	log.Printf("InitRun\n")
 
 	// Read the request body
 	body, err := ioutil.ReadAll(r.Body)
@@ -41,27 +43,19 @@ func InitRun(w http.ResponseWriter, r *http.Request) {
 				http.StatusInternalServerError)
 		}
 
-		fmt.Printf("b: %s\n", string(b))
+		log.Printf("currentTestRun.Commands: \n%s\n", string(b))
 
 		mtx.Lock()
-
 		for _, line := range strings.Split(string(b), "\n") {
 			line = strings.TrimSpace(line)
 			if line != "" {
 				currentTestRun.Commands = append(currentTestRun.Commands, line)
 			}
 		}
-
-		fmt.Printf("currentTestRun.Commands: %v\n", currentTestRun.Commands)
 		mtx.Unlock()
 
 		currentTestRun.Status = "READY"
 	}
-
-	// Reset the test run
-	currentTestEventFilters = nil
-	currentTestResult = TestResult{}
-	currentTestSummary = nil
 
 	// Marshal array of struct
 	testRunJson, err := json.MarshalIndent(currentTestRun, "", " ")
@@ -97,6 +91,9 @@ curl -d "testqueue" http://localhost:8081/init
 // GetCommand sends back the current test run.
 // In cooperation with RemoveCommand does it provide the next command in the queue.
 func GetCommand(w http.ResponseWriter, r *http.Request) {
+	log.Printf("GetCommand\n")
+
+	log.Printf("currentTestRun: %v\n", currentTestRun)
 
 	// Get rid of warning
 	_ = r
@@ -107,6 +104,8 @@ func GetCommand(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("failed to write marshal testRun: %s", err),
 			http.StatusInternalServerError)
 	}
+
+	log.Printf("currentTestRun: %v\n", currentTestRun)
 
 	_, err = fmt.Fprintf(w, string(testRunJson))
 	if err != nil {
@@ -122,6 +121,7 @@ curl http://localhost:8081/get
 // RemoveCommand removes the last command from the queue.
 // In cooperation with GetCommand does it provide the next command in the queue.
 func RemoveCommand(w http.ResponseWriter, r *http.Request) {
+	log.Printf("RemoveCommand\n")
 
 	// Read the request body
 	body, err := ioutil.ReadAll(r.Body)
@@ -163,6 +163,7 @@ func RemoveCommand(w http.ResponseWriter, r *http.Request) {
 
 // GetRun sends back the data of the current test run
 func GetRun(w http.ResponseWriter, r *http.Request) {
+	log.Printf("GetRun\n")
 
 	// Get rid of warning
 	_ = r
@@ -187,4 +188,27 @@ func GetRun(w http.ResponseWriter, r *http.Request) {
 
 /*
 curl http://localhost:8081/getrun
+*/
+
+// ResetRun resets current test run.
+func ResetRun(w http.ResponseWriter, r *http.Request) {
+
+	// Get rid of warning
+	_ = r
+
+	// Reset the test run
+	currentTestRun = TestRun{}
+	currentTestEventFilters = nil
+	currentTestResult = TestResult{}
+	currentTestSummary = nil
+
+	_, err := fmt.Fprintf(w, "")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to write response: %s", err),
+			http.StatusInternalServerError)
+	}
+}
+
+/*
+curl http://localhost:8081/resetrun
 */

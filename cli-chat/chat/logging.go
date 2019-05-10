@@ -29,7 +29,8 @@ func startLogging(logname string) (*os.File, error) {
 		logfilename = logname
 		log.SetPrefix(fmt.Sprintf("<%s> ", name))
 	}
-	logfile, err := os.OpenFile(logfilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	// Todo logdir as env variable
+	logfile, err := os.OpenFile("log/"+logfilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, fmt.Errorf("error opening logfile %v: %v", logfilename, err)
 	}
@@ -94,6 +95,7 @@ func cmdLogging(arguments []string) {
 			displayError("could not start logging", err)
 			return
 		}
+		// Todo incorrect format in logfile
 		log.Printf("Switch from logging by command to %q\n", logfile)
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 var (
@@ -39,9 +40,28 @@ func Run() {
 		return
 	}
 
+	// Config logging
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+
+	// Prepare logfile for logging
+	year, month, day := time.Now().Date()
+	hour, minute, second := time.Now().Clock()
+	logfilename := fmt.Sprintf("cli-test-server%v%02d%02d%02d%02d%02d.log",
+		year, int(month), int(day), int(hour), int(minute), int(second))
+	// Todo logdir as env variable
+	logfile, err := os.OpenFile("log/"+logfilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Printf("error opening logfile %v: %v", logfilename, err)
+		return
+	}
+
+	// Switch logging to logfile
+	log.SetOutput(logfile)
+
 	// TestRun related handler functions
 	http.HandleFunc("/init", InitRun)
 	http.HandleFunc("/getrun", GetRun)
+	http.HandleFunc("/resetrun", ResetRun)
 
 	// TestRun.Commands related handler functions
 	http.HandleFunc("/getcommand", GetCommand)

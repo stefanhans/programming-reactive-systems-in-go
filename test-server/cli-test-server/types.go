@@ -10,7 +10,7 @@ var (
 type TestRun struct {
 	ID          string   `json:"id,omitempty"`
 	Name        string   `json:"name,omitempty"`
-	Commands    []string `json:"queue,omitempty"`
+	Commands    []string `json:"commands,omitempty"`
 	CurrentPeer string   `json:"currentpeer,omitempty"`
 	Status      string   `json:"status,omitempty"`
 }

@@ -79,12 +79,17 @@ func configureMemberlist(arguments []string) bool {
 	id := uuid.NewUUID().String()
 	conf.Name = name + "-" + hostname + "-" + id
 
-	mlogfile = "mlist" + name + ".log"
+	// Prepare logfile for memberlist
+	year, month, day := time.Now().Date()
+	hour, minute, second := time.Now().Clock()
+	mlogfile = fmt.Sprintf("memberlist-%s-%v%02d%02d%02d%02d%02d.log", name,
+		year, int(month), int(day), int(hour), int(minute), int(second))
 
 	// Set logger (with output to logfile parameter)
 	w := io.Writer(os.Stderr)
 	if len(mlogfile) > 0 {
-		f, err := os.Create(mlogfile)
+		// Todo logdir as env variable
+		f, err := os.Create("log/" + mlogfile)
 		if err == nil {
 			w = io.Writer(f)
 			shortName = fmt.Sprintf("<%s-%s-*> ", hostname, id[:7])
@@ -181,12 +186,17 @@ func loadMemberlistConfiguration(arguments []string) bool {
 
 	conf.Events = &eventDelegate{}
 
-	mlogfile = "mlist" + name + ".log"
+	// Prepare logfile for memberlist
+	year, month, day := time.Now().Date()
+	hour, minute, second := time.Now().Clock()
+	mlogfile = fmt.Sprintf("memberlist-%s-%v%02d%02d%02d%02d%02d.log", name,
+		year, int(month), int(day), int(hour), int(minute), int(second))
 
 	// Set logger (with output to logfile parameter)
 	w := io.Writer(os.Stderr)
 	if len(mlogfile) > 0 {
-		f, err := os.Create(mlogfile)
+		// Todo logdir as env variable
+		f, err := os.Create("log/" + mlogfile)
 		if err == nil {
 			w = io.Writer(f)
 		}

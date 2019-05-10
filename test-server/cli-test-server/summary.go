@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
 
 func saveTestJsonData(w http.ResponseWriter) {
+	log.Printf("saveTestJsonData\n")
 
 	// Marshal array of struct
 	testEventFiltersJson, err := json.MarshalIndent(currentTestEventFilters, "", " ")
@@ -60,6 +62,7 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 	}
 
 	testPeer := arguments[0]
+	log.Printf("PrepareTestSummary from %s: %v\n", testPeer, currentTestSummary)
 
 	for _, currentTestEval := range currentTestSummary {
 		if currentTestEval.Peer == testPeer {
@@ -68,6 +71,8 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	log.Printf("currentTestResult: \n%v\n", currentTestResult)
 
 	fmt.Printf("GetTestSummary: %s\n", string(decodeJsonBytes(body)))
 
@@ -134,7 +139,7 @@ func PrepareTestSummary(w http.ResponseWriter, r *http.Request) {
 
 	saveTestJsonData(w)
 
-	currentTestRun.ID = ""
+	//currentTestRun.ID = ""
 
 	_, err = fmt.Fprintf(w, "")
 	if err != nil {
@@ -149,6 +154,7 @@ curl -d "alice" http://localhost:8081/preparesummary
 
 // GetTestSummary sends back the summary of the last test run.
 func GetTestSummary(w http.ResponseWriter, r *http.Request) {
+	log.Printf("GetTestSummary\n")
 
 	// Get rid of warning
 	_ = r

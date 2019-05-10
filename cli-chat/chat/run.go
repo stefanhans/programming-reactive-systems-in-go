@@ -75,6 +75,7 @@ func doTesting() {
 	if !initTest(testName) {
 		displayError("test load failed")
 	}
+	log.Printf("currentTestRun: %v\n", currentTestRun)
 
 	for !testend {
 
@@ -85,7 +86,7 @@ func doTesting() {
 			sendTestCommandResult("OK")
 
 			if removeTest() {
-				logGreen("command remove successful")
+				log.Printf("command remove successful\n")
 			} else {
 				logYellow("command remove error")
 			}
@@ -98,17 +99,30 @@ func doTesting() {
 			break
 		}
 
-		if len(currentTestRun.Commands) != 0 && strings.Split(currentTestRun.Commands[0], " ")[0] == name {
+		if len(currentTestRun.Commands) != 0 &&
+			strings.Split(currentTestRun.Commands[0], " ")[0] == name {
 			continue
 		}
 
 		time.Sleep(time.Second * 1)
 	}
 
+	if removeTest() {
+		logGreen("last command remove successful")
+	} else {
+		logYellow("last command remove error")
+	}
+
 	displayGreenText(fmt.Sprintf("Test %s finished", currentTestRun.ID))
 
-	if !prepareTestSummary() {
-		displayError("test summary preparation failed")
+	logBlue(fmt.Sprintf("currentTestRun: %v\n", currentTestRun))
+	logBlue(fmt.Sprintf("len(currentTestRun.Commands): %d\n", len(currentTestRun.Commands)))
+
+	if len(currentTestRun.Commands) == 0 {
+
+		if !prepareTestSummary() {
+			displayError("test summary preparation failed")
+		}
 	}
 
 	cmdLogging([]string{"off"})

@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
 
 // PutTestResult receives the result of a test command
 func PutTestResult(w http.ResponseWriter, r *http.Request) {
+	log.Printf("PutTestResult\n")
 
 	// Read the request body
 	body, err := ioutil.ReadAll(r.Body)
@@ -50,6 +52,8 @@ func PutTestResult(w http.ResponseWriter, r *http.Request) {
 
 	mtx.Unlock()
 
+	log.Printf("currentTestResult: \n%v\n", currentTestResult)
+
 	// Marshal array of struct
 	testResultJson, err := json.MarshalIndent(currentTestResult, "", " ")
 	if err != nil {
@@ -71,6 +75,7 @@ curl -d "testID testname alice OK just an comment" http://localhost:8081/putresu
 
 // GetTestResults sends back all test results
 func GetTestResults(w http.ResponseWriter, r *http.Request) {
+	log.Printf("GetTestResults\n")
 
 	// Get rid of warnings
 	_ = r

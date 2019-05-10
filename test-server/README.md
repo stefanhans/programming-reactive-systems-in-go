@@ -31,29 +31,32 @@ charly msg test
 ```
 
 In this test, we have three clients, alice, bob, and charly. All do the same. 
-They initialize the chat, set a filter expecting a message from the other two, and send a message themselves.
+They initialize the chat, set a filter expecting a message from the other two, 
+and send a message themselves.
 
 A successful test shows the following summary:
 
 ```
 │Summary of "default" (8e389cce-7301-11e9-b4f3-acde48001122)                           │
 │--------------------------------------------------------------------------            │
+│command  "alice init" OK                                                              │
+│command  "alice testfilter messagesView 1 <bob> test" OK                              │
+│event  "alice testfilter messagesView 1 <bob> test" OK                                │
+│command  "alice testfilter messagesView 1 <charly> test" OK                           │
+│event  "alice testfilter messagesView 1 <charly> test" OK                             │
+│command  "alice msg test" OK                                                          │
+│command  "bob init" OK                                                                │
+│command  "bob testfilter messagesView 1 <alice> test" OK                              │
+│event  "bob testfilter messagesView 1 <alice> test" OK                                │
+│command  "bob testfilter messagesView 1 <charly> test" OK                             │
+│event  "bob testfilter messagesView 1 <charly> test" OK                               │
+│command  "bob msg test" OK                                                            │
 │command  "charly init" OK                                                             │
 │command  "charly testfilter messagesView 1 <alice> test" OK                           │
 │event  "charly testfilter messagesView 1 <alice> test" OK                             │
 │command  "charly testfilter messagesView 1 <bob> test" OK                             │
 │event  "charly testfilter messagesView 1 <bob> test" OK                               │
 │command  "charly msg test" OK                                                         │
-│command  "alice testfilter messagesView 1 <bob> test" OK                              │
-│event  "alice testfilter messagesView 1 <bob> test" OK                                │
-│command  "alice testfilter messagesView 1 <charly> test" OK                           │
-│event  "alice testfilter messagesView 1 <charly> test" OK                             │
-│command  "alice msg test" OK                                                          │
-│command  "bob testfilter messagesView 1 <alice> test" OK                              │
-│event  "bob testfilter messagesView 1 <alice> test" OK                                │
-│command  "bob testfilter messagesView 1 <charly> test" OK                             │
-│event  "bob testfilter messagesView 1 <charly> test" OK                               │
-│command  "bob msg test" OK                                                            │
 │--------------------------------------------------------------------------            │
 ```
 
