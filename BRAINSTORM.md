@@ -29,6 +29,8 @@ test API as library
 
 test sidecar JSON logging
 
+organize log and script files away from main directory
+
 ---
 
 

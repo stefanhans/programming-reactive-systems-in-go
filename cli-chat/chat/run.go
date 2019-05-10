@@ -114,6 +114,7 @@ func doTesting() {
 	cmdLogging([]string{"off"})
 }
 
+// Run starts the application.
 func Run() {
 
 	checkCommandlineArgs()

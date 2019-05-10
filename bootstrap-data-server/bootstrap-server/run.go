@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Run starts the service.
 func Run() {
 
 	http.HandleFunc("/join", Join)
