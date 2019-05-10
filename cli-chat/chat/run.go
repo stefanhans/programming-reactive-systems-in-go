@@ -70,12 +70,15 @@ func doTesting() {
 		testName = "default"
 	}
 
+	// Todo: move log to testdir and enhance naming
 	cmdLogging(strings.Split(fmt.Sprintf("on %s.log", testName), " "))
 
 	if !initTest(testName) {
 		displayError("test load failed")
+		return
 	}
-	log.Printf("currentTestRun: %v\n", currentTestRun)
+
+	displayGreenText(fmt.Sprintf("Test %q (%s) starting", currentTestRun.Name, currentTestRun.ID))
 
 	for !testend {
 

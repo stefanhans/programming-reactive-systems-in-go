@@ -81,7 +81,7 @@ func (d *delegate) NotifyMsg(b []byte) {
 		delete(chatMembers, newChatMember.Name)
 		mtx.Unlock()
 
-		displayYelloText(fmt.Sprintf("Member_LEAVE: %s", newChatMember.Name))
+		log.Printf("Member_LEAVE: %s", newChatMember.Name)
 
 		log.Printf("Ping chat member %q to decide removal from chat\n", newChatMember.Name)
 
