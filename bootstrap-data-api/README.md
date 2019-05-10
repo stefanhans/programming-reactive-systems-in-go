@@ -67,7 +67,7 @@ The server chooses the peer with the oldest timestamp or uptime, respectively, t
 
 We test the API against two different backend services:
 
-##### A HTTP server running on localhost
+#### A HTTP server running on localhost
 
 Start the webserver:
 
@@ -87,7 +87,7 @@ export BOOTSTRAP_DATA_SERVER="http://localhost:8080"
 go test -run TestLocalhost
 ```
 
-##### GCP Cloud Functions
+#### GCP Cloud Functions
 
 ```
 cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api
