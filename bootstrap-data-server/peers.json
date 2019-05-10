@@ -1,7 +1,27 @@
 {
   "Config": {
     "maxpeers": 2,
-    "minrefillcandidates": 2
+    "minrefillcandidates": 2,
+    "numpeers": 2
   },
-  "Peers": {}
+  "Peers": {
+    "41dcd4f7-9a78-4b6d-b99f-748444c6ff69": {
+      "id": "41dcd4f7-9a78-4b6d-b99f-748444c6ff69",
+      "name": "alice-Stefans-MacBook-Pro.local-8e38ff2a-7301-11e9-a1d3-acde48001122",
+      "ip": "127.0.0.1",
+      "port": "55815",
+      "protocol": "tcp",
+      "status": "0",
+      "timestamp": "1557478612"
+    },
+    "b7cb9199-73eb-4169-b322-c2e46481368d": {
+      "id": "b7cb9199-73eb-4169-b322-c2e46481368d",
+      "name": "bob-Stefans-MacBook-Pro.local-903d8f5c-7301-11e9-aa42-acde48001122",
+      "ip": "127.0.0.1",
+      "port": "55827",
+      "protocol": "tcp",
+      "status": "0",
+      "timestamp": "1557478616"
+    }
+  }
 }

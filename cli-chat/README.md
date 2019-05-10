@@ -19,6 +19,11 @@ The backend consists of three layers or services, respectively,
  Additionally, it acts as a client for multi-client testing.   
 
 
+### Usage of the application command
+
+You can start the application in test mode or as fully initialized chat. The state after the test depends on its commands. 
+Only in the test mode, you do have access on the test related commands. All other commands are always accessible.
+
 ```
 usage: 	 ./cli-chat [-test [-testfile=<filename>]] [-logfile=<filename> | -logfile=/dev/null] <name>
 ```
@@ -75,6 +80,5 @@ Now, you can start step by step or play as wanted.
 
 **Leave the cli-tool**
 
-- `quit`
-
-
+- `quit` does a soft shutdown
+- `exit` does a hard exit
