@@ -10,6 +10,7 @@ Description: help shows:
 - all commands of a group (/help groups <group>)
 - help text of a command (/help <command>)
 
+<br>
 
 ### Help Groups
 
