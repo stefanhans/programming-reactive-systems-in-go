@@ -69,8 +69,9 @@ testfilter testfilters testlocalfilters testreset testrun testsummary testsummar
 
 Usage: /bootstrap
 
-
 Description: bootstrap shows bootstrap data from remote
+
+<br>
 
 `/help bootstrapconfig`
 
