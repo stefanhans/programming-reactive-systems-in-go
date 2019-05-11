@@ -1,6 +1,6 @@
 {
   "Config": {
-    "maxpeers": 3,
+    "maxpeers": 2,
     "minrefillcandidates": 1
   },
   "Peers": {}
