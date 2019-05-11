@@ -17,47 +17,47 @@ Description: help shows:
 
 bootstrap broadcast chat cli development memberlist script test
 
----
+<br>
 
 `/help groups bootstrap`
 
 bootstrap bootstrapconfig bootstrapjoin bootstrapleave bootstraplistlocal bootstrappeers bootstraprefill bootstrapreset
 
----
+<br>
 
 `/help groups broadcast`
 
 broadcastadd broadcastdel broadcastlist
 
----
+<br>
 
 `/help groups chat`
 
 chatleave chatmemberping chatmembers chatping chatstart chatstop msg
 
----
+<br>
 
 `/help groups cli`
 
 exit log
 
----
+<br>
 `/help groups development`
 
 init play quit
 
----
+<br>
 `/help groups memberlist`
 
 loadconfig localnode memberlist memberlistconfigure memberlistcreate memberlistdelete memberlisthealthscore memberlistjoin memberlistleave memberlistshutdown memberlistshutdowntransport memberliststart memberlistupdate saveconfig showconfig showmemberlist
 
----
+<br>
 
 `/help groups script`
 
 echo execute shell sleep
 
----
+<br>
 
 `/help groups test`
 
@@ -470,5 +470,3 @@ Usage: /testsummaryprepare
 
 Description: testsummaryprepare finalizes the test and prepares the test summary
 
-
----
