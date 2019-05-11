@@ -74,10 +74,14 @@ Now, you can start step by step or play as wanted.
 
 **See all available commands**
 
-- `/help` shows commands and descriptions
+- `/help` shows commands and descriptions 
+
+[HELP.md](HELP.md) shows the complete help as well.
 
 
 **Leave the cli-tool**
 
 - `/quit` does a soft shutdown
 - `/exit` does a hard exit
+
+
