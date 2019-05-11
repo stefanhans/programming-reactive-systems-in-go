@@ -73,8 +73,8 @@ All can easily be enhanced.
 
 ### Multi-Client Testing
 
-For the tests of scenarios with interacting clients, we have `test-server` doing the coordination.
-The clients have an integrated API to the test server and an own set of internal commands.
+For the tests with interacting clients, we have `test-server` doing the coordination.
+The clients have an integrated API and an own set of internal commands.
 The tests itself are scripts provided to the test server.
 
 
