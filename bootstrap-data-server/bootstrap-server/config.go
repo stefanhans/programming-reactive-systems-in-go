@@ -66,6 +66,8 @@ func ConfigUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Todo if maxPeers < bootstrapData.Config.MaxPeers increase list
+
 	bootstrapData.Config.MaxPeers = maxPeers
 	bootstrapData.Config.MinRefillCandidates = minRefillCandidates
 

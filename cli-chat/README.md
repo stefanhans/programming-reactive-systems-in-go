@@ -51,34 +51,33 @@ Now, you can start step by step or play as wanted.
 
 **Create your memberlist node**
 
-- `memberlistconfigure` creates a memberlist configuration
-- `memberlistcreate` creates the memberlist specified by the configuration
+- `/memberlistconfigure` creates a memberlist configuration
+- `/memberlistcreate` creates the memberlist specified by the configuration
 
 
 **Get, and possibly join, the bootstrap peers**
 
-- `bootstrapjoin` joins calling peer to bootstrap peers
+- `/bootstrapjoin` joins calling peer to bootstrap peers
 
 
 **Join the memberlist**
 
-- `memberliststart` starts broadcasting between the members
-- `memberlistjoin` joins bootstrap peers to memberlist
+- `/memberliststart` starts broadcasting between the members
+- `/memberlistjoin` joins bootstrap peers to memberlist
 
 
 **Join the chat and say hi**
 
-- `chatstart` start chat listener and join the chat
-- `msg hi` send a message to all chat members
+- `/chatstart` start chat listener and join the chat
+- `/msg hi` send a message to all chat members
 
 
 **See all available commands**
 
-- `<tab><tab>` lists all commands using code completion
-- `help` or other not existing command shows commands and descriptions
+- `/help` shows commands and descriptions
 
 
 **Leave the cli-tool**
 
-- `quit` does a soft shutdown
-- `exit` does a hard exit
+- `/quit` does a soft shutdown
+- `/exit` does a hard exit

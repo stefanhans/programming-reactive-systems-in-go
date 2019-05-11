@@ -251,24 +251,6 @@ var (
 				usage:       "/echo <string>",
 				description: "echo prints rest of line",
 			},
-			"lock": {
-				name:        "lock",
-				group:       "script",
-				usage:       "/lock <name>...",
-				description: "lock creates a <name>.wait lockfile",
-			},
-			"unlock": {
-				name:        "unlock",
-				group:       "script",
-				usage:       "/unlock <name>...",
-				description: "unlock removes a <name>.wait lockfile",
-			},
-			"wait": {
-				name:        "wait",
-				group:       "script",
-				usage:       "/wait",
-				description: "wait until a <name>.wait lockfile is gone",
-			},
 			"shell": {
 				name:        "shell",
 				group:       "script",
@@ -305,11 +287,11 @@ var (
 				usage:       "/quit",
 				description: "quit simulates the exit process of the application",
 			},
-			"testfilter": {
-				name:        "testfilter",
+			"testrun": {
+				name:        "testrun",
 				group:       "test",
-				usage:       "/testfilter messagesView <expected events> <expected text>",
-				description: "testfilter adds an event filter to the messages view of the chat",
+				usage:       "/testrun",
+				description: "testrun shows the current test run, i.e., only the not yet done commands",
 			},
 			"testlocalfilters": {
 				name:        "testlocalfilters",
@@ -317,17 +299,35 @@ var (
 				usage:       "/testlocalfilters",
 				description: "testlocalfilters shows the local event filters",
 			},
-			"testevents": {
-				name:        "testevents",
+			"testfilters": {
+				name:        "testfilters",
 				group:       "test",
-				usage:       "/testevents",
-				description: "testevents shows all events",
+				usage:       "/testfilters",
+				description: "testfilters shows all filters and events",
+			},
+			"testfilter": {
+				name:        "testfilter",
+				group:       "test",
+				usage:       "/testfilter messagesView <expected events> <expected text>",
+				description: "testfilter adds an event filter to the messages view of the chat",
 			},
 			"testsummary": {
 				name:        "testsummary",
 				group:       "test",
 				usage:       "/testsummary",
 				description: "testsummary shows test summary",
+			},
+			"testsummaryprepare": {
+				name:        "testsummaryprepare",
+				group:       "test",
+				usage:       "/testsummaryprepare",
+				description: "testsummaryprepare finalizes the test and prepares the test summary",
+			},
+			"testreset": {
+				name:        "testreset",
+				group:       "test",
+				usage:       "/testreset",
+				description: "testreset resets the complete test run including the summary",
 			},
 		},
 	}

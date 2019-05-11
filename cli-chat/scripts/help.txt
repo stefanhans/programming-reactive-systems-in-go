@@ -1,0 +1,70 @@
+help
+help groups
+echo -------------------------------------------------------
+help groups bootstrap
+help groups broadcast
+help groups chat
+help groups cli
+help groups development
+help groups memberlist
+help groups script
+help groups test
+echo -------------------------------------------------------
+help bootstrap
+help bootstrapconfig
+help bootstrapjoin
+help bootstrapleave
+help bootstraplistlocal
+help bootstrappeers
+help bootstraprefill
+help bootstrapreset
+echo -------------------------------------------------------
+help broadcastadd
+help broadcastdel
+help broadcastlist
+echo -------------------------------------------------------
+help chatleave
+help chatmemberping
+help chatmembers
+help chatping
+help chatstart
+help chatstop
+help msg
+echo -------------------------------------------------------
+help exit
+help log
+echo -------------------------------------------------------
+help init
+help play
+help quit
+echo -------------------------------------------------------
+help loadconfig
+help localnode
+help memberlist
+help memberlistconfigure
+help memberlistcreate
+help memberlistdelete
+help memberlisthealthscore
+help memberlistjoin
+help memberlistleave
+help memberlistshutdown
+help memberlistshutdowntransport
+help memberliststart
+help memberlistupdate
+help saveconfig
+help showconfig
+help showmemberlist
+echo -------------------------------------------------------
+help echo
+help execute
+help shell
+help sleep
+echo -------------------------------------------------------
+help testfilter
+help testfilters
+help testlocalfilters
+help testreset
+help testrun
+help testsummary
+help testsummaryprepare
+echo -------------------------------------------------------
