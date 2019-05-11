@@ -79,6 +79,8 @@ Usage: /bootstrapconfig
 
 Description: bootstrapconfig shows bootstrap configuration from remote
 
+<br><br>
+
 `/help bootstrapjoin`
 
 Usage: /bootstrapjoin
