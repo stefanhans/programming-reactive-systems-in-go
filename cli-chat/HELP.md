@@ -65,6 +65,8 @@ echo execute shell sleep
 
 testfilter testfilters testlocalfilters testreset testrun testsummary testsummaryprepare
 
+<br>
+
 ### Help Group "bootstrap"
 
 `/help bootstrap`
@@ -129,6 +131,7 @@ Usage: /bootstrapreset
 
 Description: bootstrapreset resets the bootstrap peers at remote
 
+<br>
 
 ### Help Group "broadcast"
 
@@ -154,6 +157,7 @@ Usage: /broadcastlist
 
 Description: broadcastlist lists all local key/value pairs
 
+<br>
 
 ### Help Group "chat"
 
@@ -211,6 +215,7 @@ Usage: /msg <string>
 
 Description: msg sends the rest of the line as message to all other members
 
+<br>
 
 ### Help Group "cli"
 
@@ -228,6 +233,7 @@ Usage: /log (on <filename> | off)
 
 Description: log starts or stops writing logging output in the specified file
 
+<br>
 
 ### Help Group "development"
 
@@ -253,6 +259,7 @@ Usage: /quit
 
 Description: quit simulates the exit process of the application
 
+<br>
 
 ### Help Group "memberlist"
 
@@ -382,6 +389,7 @@ Usage: /showmemberlist                                                          
 
 Description: showmemberlist shows the memberlist
 
+<br>
 
 ### Help Group "script"
 
@@ -415,6 +423,7 @@ Usage: /sleep <seconds>
 
 Description: sleep sleeps for seconds
 
+<br>
 
 ### Help Group "test"
 
