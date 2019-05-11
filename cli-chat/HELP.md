@@ -42,11 +42,13 @@ chatleave chatmemberping chatmembers chatping chatstart chatstop msg
 exit log
 
 <br>
+
 `/help groups development`
 
 init play quit
 
 <br>
+
 `/help groups memberlist`
 
 loadconfig localnode memberlist memberlistconfigure memberlistcreate memberlistdelete memberlisthealthscore memberlistjoin memberlistleave memberlistshutdown memberlistshutdowntransport memberliststart memberlistupdate saveconfig showconfig showmemberlist
