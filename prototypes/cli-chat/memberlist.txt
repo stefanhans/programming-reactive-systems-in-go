@@ -1,0 +1,7 @@
+memberlistconfigure
+memberlistcreate
+bootstrapjoin
+memberliststart
+memberlistjoin
+sleep 1
+memberlist
