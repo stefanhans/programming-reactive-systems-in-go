@@ -1,7 +1,7 @@
 **Create your memberlist node**
 
-- `configure` creates a memberlist configuration
-- `create` creates the memberlist specified by the configuration
+- `memberlistconfigure` creates a memberlist configuration
+- `memberlistcreate` creates the memberlist specified by the configuration
 
 
 **Get, and possibly join, the bootstrap peers**

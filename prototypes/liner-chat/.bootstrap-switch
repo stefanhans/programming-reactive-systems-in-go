@@ -1,0 +1,14 @@
+GCP_SERVICE_URL="https://europe-west1-bootstrap-data-cloudfunctions.cloudfunctions.net"
+LOCALHOST_SERVICE_URL="http://localhost:8080"
+
+OLD="$BOOTSTRAP_DATA_SERVER"
+
+if [[ "$BOOTSTRAP_DATA_SERVER" == "$GCP_SERVICE_URL" ]]
+then
+    export BOOTSTRAP_DATA_SERVER="$LOCALHOST_SERVICE_URL"
+else
+    export BOOTSTRAP_DATA_SERVER="$GCP_SERVICE_URL"
+fi
+
+echo "Changed environment variable \"BOOTSTRAP_DATA_SERVER\" from \"$OLD\" to \"$BOOTSTRAP_DATA_SERVER\""
+

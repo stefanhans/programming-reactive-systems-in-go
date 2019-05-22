@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/cli-chat/bootstrap-data-api"
+	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-chat/bootstrap-data-api"
 )
 
 var (

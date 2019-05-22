@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/hashicorp/memberlist"
-	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/cli-chat/chat-member"
+	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-chat/chat-member"
 )
 
 var (
