@@ -1,0 +1,34 @@
+syntax = 'proto3';
+
+package serviceproviders;
+
+message Service {
+    enum Status {
+        CANDIDATE = 0; // can become a service
+        SERVICE   = 1; // a service
+        PROVIDER  = 2; // provides a service
+        NOTFOUND  = 3; // return value, if no requested service found
+    }
+    string name   = 1;
+    string ip     = 2;
+    string port   = 3;
+    Status status = 4;
+}
+
+// A service provider administrates a list of service candidates (with one working service)
+message ServiceProvider {
+    Service provider          = 1;
+    repeated Service services = 2;
+}
+
+// Mappings by request/reply message types
+message Message {
+    enum MessageType {
+        // messages to get a service from a provider
+        SERVICE_REQUEST = 0;
+        SERVICE_REPLY   = 1;
+    }
+    MessageType msgType             = 1;
+    ServiceProvider serviceProvider = 2; // requested provider with its services
+    Service sender                  = 3; // service candidate
+}
