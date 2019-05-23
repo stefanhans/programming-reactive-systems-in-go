@@ -23,7 +23,7 @@ func startLogging(logname string) (*os.File, error) {
 		// Prepare logfile for logging
 		year, month, day := time.Now().Date()
 		hour, minute, second := time.Now().Clock()
-		logfilename = fmt.Sprintf("cli-chat-%s-%v%02d%02d%02d%02d%02d.log", name,
+		logfilename = fmt.Sprintf("liner-chat-%s-%v%02d%02d%02d%02d%02d.log", name,
 			year, int(month), int(day), int(hour), int(minute), int(second))
 	} else {
 		logfilename = logname

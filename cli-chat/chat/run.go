@@ -43,7 +43,7 @@ func checkCommandlineArgs() {
 	if flag.NArg() < 1 {
 		_, _ = fmt.Fprintln(os.Stderr,
 			fmt.Sprintf("usage: "+
-				"\t ./cli-chat [-test [-testfile=<filename>]] "+
+				"\t ./liner-chat [-test [-testfile=<filename>]] "+
 				"[-logfile=<filename> | -logfile=/dev/null] <name>"))
 		os.Exit(1)
 	}
