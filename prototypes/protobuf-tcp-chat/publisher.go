@@ -66,8 +66,6 @@ func startPublisher() error {
 		// multiple connections may be served concurrently.
 		go handlePublisherRequest(conn)
 	}
-
-	return nil
 }
 
 // Read all incoming data, take the message type,

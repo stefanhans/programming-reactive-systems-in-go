@@ -36,8 +36,6 @@ func startDisplayer() error {
 			}(buffer[:n], addr)
 		}
 	}
-
-	return nil
 }
 
 // Read all incoming data, take the leading byte as message type,

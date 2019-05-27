@@ -78,8 +78,6 @@ func startPublisher() error {
 			}(buffer[:n], addr)
 		}
 	}
-
-	return nil
 }
 
 // Read all incoming data, take the message type,

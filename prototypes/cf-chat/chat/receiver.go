@@ -43,8 +43,6 @@ func startChatListener() error {
 		// multiple connections may be served concurrently.
 		go handleMessage(conn)
 	}
-
-	return nil
 }
 
 var messageActionMap = map[chatgroup.Message_MessageType]func(*chatgroup.Message) error{

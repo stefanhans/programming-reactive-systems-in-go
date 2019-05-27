@@ -46,8 +46,6 @@ func startDisplayer() error {
 		// multiple connections may be served concurrently.
 		go handleDisplayerRequest(conn)
 	}
-
-	return nil
 }
 
 // Read all incoming data, take the leading byte as message type,
