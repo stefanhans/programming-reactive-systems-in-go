@@ -125,29 +125,33 @@ func showMemberlistConfiguration(arguments []string) {
 func saveMemberlistConfiguration(arguments []string) {
 
 	// Marshal array of struct
-	if byteArray, err := json.Marshal(conf); err != nil {
+	byteArray, err := json.Marshal(conf)
+	if err != nil {
 		fmt.Printf("json.Marshal: %v\n", err)
 		return
-	} else {
-		var filename string
-
-		if len(arguments) > 0 {
-			filename = arguments[0]
-		} else {
-			filename = conf.Name + ".json"
-		}
-
-		//Formated JSON
-		var out bytes.Buffer
-		err = json.Indent(&out, byteArray, "", "\t")
-
-		// Replace '{}' with 'null' in JSON string
-		str := strings.Replace(string(out.Bytes()), "{}", "null", -1)
-
-		ioutil.WriteFile(filename, append([]byte(str), byte('\n')), 0600)
-
-		fmt.Printf("%s\n", filename)
 	}
+
+	var filename string
+
+	if len(arguments) > 0 {
+		filename = arguments[0]
+	} else {
+		filename = conf.Name + ".json"
+	}
+
+	//Formated JSON
+	var out bytes.Buffer
+	err = json.Indent(&out, byteArray, "", "\t")
+	if err != nil {
+		fmt.Printf("json.Indent: %v\n", err)
+	}
+
+	// Replace '{}' with 'null' in JSON string
+	str := strings.Replace(string(out.Bytes()), "{}", "null", -1)
+
+	ioutil.WriteFile(filename, append([]byte(str), byte('\n')), 0600)
+
+	fmt.Printf("%s\n", filename)
 }
 
 func loadMemberlistConfiguration(arguments []string) {
@@ -394,7 +398,7 @@ func shutdownBroadcast(arguments []string) {
 		return
 	}
 
-	// Shutdown will stop any background maintanence of network activity
+	// Shutdown will stop any background maintenance of network activity
 	// for this memberlist, causing it to appear "dead". A leave message
 	// will not be broadcasted prior, so the cluster being left will have
 	// to detect this node's shutdown using probing. If you wish to more

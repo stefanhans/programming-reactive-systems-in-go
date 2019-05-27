@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-// Wrapper for the PublisherClient function Subscribe
+// Subscribe sends a subscribe request to the publisher
 func Subscribe(name string, ip string, port string) error {
 
 	// Create gRPC client connected with gRPC publisher
@@ -26,7 +26,7 @@ func Subscribe(name string, ip string, port string) error {
 	return nil
 }
 
-// Wrapper for the PublisherClient function Unsubscribe
+// Unsubscribe sends a unsubscribe request to the publisher
 func Unsubscribe(name string) error {
 
 	// Create gRPC client connected with gRPC publisher
@@ -43,7 +43,7 @@ func Unsubscribe(name string) error {
 	return nil
 }
 
-// Wrapper for the PublisherClient function Publish
+// Publish send a publish request to the publisher
 func Publish(name string, text ...string) error {
 
 	// Create gRPC client connected with gRPC publisher

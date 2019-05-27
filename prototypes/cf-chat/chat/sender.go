@@ -39,6 +39,7 @@ func Unsubscribe() error {
 	return nil
 }
 
+// Publish sends a message to all other chat members
 func Publish(text string) error {
 	cLog.Printf("Publish(%q)\n", text)
 

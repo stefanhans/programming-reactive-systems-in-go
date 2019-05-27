@@ -234,7 +234,7 @@ func TestPublishMessage(t *testing.T) {
 // and it multiplexes the test result into the appropriate channel
 func handleTestCmdReply(msg *chatgroup.Message) error {
 
-	// Prepare the message text, i.e. seperate the command from its returned data
+	// Prepare the message text, i.e. separate the command from its returned data
 	msgTexts := strings.SplitN(msg.Text, "|", 2)
 
 	// Todo: Refactor the function to close it for changes while keeping it open to extensions

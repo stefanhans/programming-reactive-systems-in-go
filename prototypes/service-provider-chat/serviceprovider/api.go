@@ -306,6 +306,7 @@ func (serviceProvider *ServiceProvider) StartClientService() {
 	}(listener)
 }
 
+// RequestServices sends a request for a list of services to the service
 func (serviceProvider *ServiceProvider) RequestServices() error {
 
 	serviceProvider.message.MsgType = serviceproviders.Message_SERVICE_REQUEST
@@ -314,6 +315,7 @@ func (serviceProvider *ServiceProvider) RequestServices() error {
 	return tcpSend(serviceProvider.message, net.JoinHostPort(serviceProvider.provider.Ip, serviceProvider.provider.Port))
 }
 
+// GetService sends a request for the active service to the service
 func (serviceProvider *ServiceProvider) GetService() (*serviceproviders.Service, error) {
 
 	for _, s := range serviceProvider.serviceProvider.Services {
@@ -324,6 +326,7 @@ func (serviceProvider *ServiceProvider) GetService() (*serviceproviders.Service,
 	return nil, fmt.Errorf("no active service found")
 }
 
+// GetServiceAddress sends a request for the active service address to the service
 func (serviceProvider *ServiceProvider) GetServiceAddress() (string, error) {
 
 	for _, s := range serviceProvider.serviceProvider.Services {

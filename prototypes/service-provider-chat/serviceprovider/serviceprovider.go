@@ -10,11 +10,14 @@ import (
 	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/service-provider-chat/serviceprovider/serviceproviders"
 )
 
+// ServiceProviderType is an enumeration to distinguish between the root service and the returned service
 type ServiceProviderType int32
 
 const (
-	PROVIDER ServiceProviderType = 0 // PROVIDER is a root service and has to be known explicitly
-	SERVICE  ServiceProviderType = 1 // SERVICE can be requested from a PROVIDER
+	// PROVIDER is a root service and has to be known explicitly
+	PROVIDER ServiceProviderType = 0
+	// SERVICE can be requested from a PROVIDER
+	SERVICE ServiceProviderType = 1
 )
 
 type ServiceProvider struct {

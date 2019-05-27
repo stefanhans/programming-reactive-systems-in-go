@@ -7,6 +7,7 @@ import (
 	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/service-provider-chat/chat/chat-group"
 )
 
+// ServiceConfig defines a service
 type ServiceConfig struct {
 	Name     string
 	Protocol string // "tcp"."udp"
@@ -14,6 +15,7 @@ type ServiceConfig struct {
 	Port     string // 22365
 }
 
+// Config represents the named configuration
 type Config struct {
 	Name            string
 	ServiceProvider *ServiceConfig // well-known service "127.0.0.1:22365" as entry point
@@ -29,30 +31,36 @@ func (config *Config) String() string {
 	return out
 }
 
+// SetServiceProvider sets the address of the service provider
 func (config *Config) SetServiceProvider(ip, port string) {
 	config.ServiceProvider.Ip = ip
 	config.ServiceProvider.Port = port
 }
 
+// ServiceProviderAddress returns the address of the service provider
 func (config *Config) ServiceProviderAddress() string {
 	return config.ServiceProvider.Ip + ":" + config.ServiceProvider.Port
 }
 
+// SetChatService sets name and address of the chat service
 func (config *Config) SetChatService(name, ip, port string) {
 	config.ChatService.Name = name
 	config.ChatService.Ip = ip
 	config.ChatService.Port = port
 }
 
+// ChatServiceAddress returns the address of the chat service
 func (config *Config) ChatServiceAddress() string {
 	return config.ChatService.Ip + ":" + config.ChatService.Port
 }
 
+// SetChatListener sets the address of the chat listener
 func (config *Config) SetChatListener(ip, port string) {
 	config.ChatListener.Ip = ip
 	config.ChatListener.Port = port
 }
 
+// ChatListenerAddress returns the address of the chat listener
 func (config *Config) ChatListenerAddress() string {
 	return config.ChatListener.Ip + ":" + config.ChatListener.Port
 }

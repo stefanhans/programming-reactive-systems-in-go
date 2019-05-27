@@ -9,6 +9,7 @@ import (
 	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/service-provider-chat/chat/chat-group"
 )
 
+// Subscribe sends a subscribe request to the publisher
 func Subscribe() error {
 
 	newMember := &chatgroup.Message{
@@ -18,6 +19,7 @@ func Subscribe() error {
 	return sendPublisherRequest(newMember)
 }
 
+// Unsubscribe sends a unsubscribe request to the publisher
 func Unsubscribe(memberName string) error {
 
 	leavingMember := &chatgroup.Message{
@@ -28,6 +30,7 @@ func Unsubscribe(memberName string) error {
 	return sendPublisherRequest(leavingMember)
 }
 
+// Publish send a publish request to the publisher
 func Publish(text string) error {
 
 	message := &chatgroup.Message{
