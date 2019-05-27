@@ -141,7 +141,7 @@ func handleSubscribeRequest(message *chatgroup.Message, addr net.Addr) error {
 
 	err := publishMessage(message, chatgroup.Message_SUBSCRIBE_REPLY)
 	if err != nil {
-		fmt.Printf("Failed to publish Message_SUBSCRIBE_REPLY", err)
+		return fmt.Errorf("Failed to publish Message_SUBSCRIBE_REPLY: %v\n", err)
 	}
 
 	return nil
@@ -164,7 +164,7 @@ func handleUnsubscribeRequest(message *chatgroup.Message, addr net.Addr) error {
 
 	err := publishMessage(message, chatgroup.Message_UNSUBSCRIBE_REPLY)
 	if err != nil {
-		return fmt.Errorf("Failed to publish Message_UNSUBSCRIBE_REPLY", err)
+		return fmt.Errorf("Failed to publish Message_UNSUBSCRIBE_REPLY: %v\n", err)
 	}
 
 	return nil
@@ -179,7 +179,7 @@ func handlePublishRequest(message *chatgroup.Message, addr net.Addr) error {
 
 	err := publishMessage(message, chatgroup.Message_PUBLISH_REPLY)
 	if err != nil {
-		return fmt.Errorf("Failed to publish Message_Message_PUBLISH_REPLY", err)
+		return fmt.Errorf("Failed to publish Message_Message_PUBLISH_REPLY: %v\n", err)
 	}
 
 	return nil
@@ -211,7 +211,7 @@ func publishMessage(message *chatgroup.Message, msgType chatgroup.Message_Messag
 				message.Sender.Name, recipient.Name, recipient.Ip, recipient.Port, message.Sender)
 			err := sendMessage(message, recipient.Ip+":"+recipient.Port)
 			if err != nil {
-				return fmt.Errorf("Failed send reply", err)
+				return fmt.Errorf("Failed send reply: %v\n", err)
 			}
 		}
 	}

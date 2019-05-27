@@ -95,7 +95,7 @@ func handlePublisherRequest(conn net.Conn) {
 	var msg chatgroup.Message
 	err := proto.Unmarshal(data, &msg)
 	if err != nil {
-		fmt.Errorf("could not unmarshall message: %v", err)
+		fmt.Printf("could not unmarshall message: %v", err)
 	}
 
 	// Fetch the handler from a map by the message type and call it accordingly
@@ -132,7 +132,7 @@ func handleSubscribeRequest(message *chatgroup.Message, addr net.Addr) error {
 
 	err := publishMessage(message, chatgroup.Message_SUBSCRIBE_REPLY)
 	if err != nil {
-		fmt.Errorf("Failed to publish Message_SUBSCRIBE_REPLY", err)
+		return fmt.Errorf("Failed to publish Message_SUBSCRIBE_REPLY: %v\n", err)
 	}
 
 	return nil
@@ -153,7 +153,7 @@ func handleUnsubscribeRequest(message *chatgroup.Message, addr net.Addr) error {
 
 	err := publishMessage(message, chatgroup.Message_UNSUBSCRIBE_REPLY)
 	if err != nil {
-		fmt.Errorf("Failed to publish Message_UNSUBSCRIBE_REPLY", err)
+		return fmt.Errorf("Failed to publish Message_UNSUBSCRIBE_REPLY: %v\n", err)
 	}
 
 	return nil
@@ -168,7 +168,7 @@ func handlePublishRequest(message *chatgroup.Message, addr net.Addr) error {
 
 	err := publishMessage(message, chatgroup.Message_PUBLISH_REPLY)
 	if err != nil {
-		fmt.Errorf("Failed to publish Message_Message_PUBLISH_REPLY", err)
+		return fmt.Errorf("Failed to publish Message_Message_PUBLISH_REPLY: %v\n", err)
 	}
 
 	return nil
@@ -200,7 +200,7 @@ func publishMessage(message *chatgroup.Message, msgType chatgroup.Message_Messag
 				message.Sender.Name, recipient.Name, recipient.Ip, recipient.Port, message.Sender)
 			err := sendMessage(message, recipient.Ip+":"+recipient.Port)
 			if err != nil {
-				fmt.Errorf("Failed send reply", err)
+				return fmt.Errorf("Failed send reply: %v\n", err)
 			}
 		}
 	}

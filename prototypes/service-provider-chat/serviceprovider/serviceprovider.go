@@ -14,12 +14,13 @@ import (
 type ServiceProviderType int32
 
 const (
-	// PROVIDER is a root service and has to be known explicitly
+	// PROVIDER is the type of a root service and has to be known explicitly
 	PROVIDER ServiceProviderType = 0
-	// SERVICE can be requested from a PROVIDER
+	// SERVICE is the type of service which can be requested from a PROVIDER
 	SERVICE ServiceProviderType = 1
 )
 
+// ServiceProvider defines a service provider of both types
 type ServiceProvider struct {
 
 	// serviceProviderType can be PROVIDER or SERVICE
