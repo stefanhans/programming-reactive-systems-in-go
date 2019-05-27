@@ -63,7 +63,7 @@ func handleDisplayerRequest(conn net.Conn) {
 	var msg chatgroup.Message
 	err := proto.Unmarshal(data, &msg)
 	if err != nil {
-		fmt.Errorf("could not unmarshall message: %v", err)
+		fmt.Printf("could not unmarshall message: %v\n", err)
 	}
 
 	log.Printf("msg from %v: %v\n", addr, msg)

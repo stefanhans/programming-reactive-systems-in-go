@@ -55,7 +55,8 @@ func main() {
 	// Create the TUI
 	clientGui, err = gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
-		fmt.Errorf("could not create tui: %v\n", err)
+		fmt.Printf("could not create tui: %v\n", err)
+		return
 	}
 	defer clientGui.Close()
 

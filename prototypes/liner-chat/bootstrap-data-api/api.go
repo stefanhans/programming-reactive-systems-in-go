@@ -109,7 +109,7 @@ func (api *BootstrapDataAPI) Join() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
@@ -142,7 +142,7 @@ func (api *BootstrapDataAPI) Leave(id string) *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
@@ -176,7 +176,7 @@ func (api *BootstrapDataAPI) Refill() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers leave (%v): %v\n", res.Proto, err)
 		return nil
 	}
 	return &bootstrapData
@@ -207,7 +207,7 @@ func (api *BootstrapDataAPI) List() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers join (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
@@ -240,7 +240,7 @@ func (api *BootstrapDataAPI) Reset() *BootstrapData {
 	var bootstrapData BootstrapData
 	err = json.Unmarshal(body, &bootstrapData)
 	if err != nil {
-		fmt.Errorf("failed to unmarshall response of bootstrap-peers Reset (%v): %v\n", res.Proto, err)
+		fmt.Printf("failed to unmarshall response of bootstrap-peers Reset (%v): %v\n", res.Proto, err)
 		return nil
 	}
 
