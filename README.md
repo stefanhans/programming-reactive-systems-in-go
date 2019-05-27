@@ -53,7 +53,7 @@ And we get a notification from it about events like joining and leaving peers.
 
 ### Chat Application
 
-The chat application is simple - join, leave and send a message.
+The chat application is simple - join, leave, and send messages to all others.
 
 
 ### CLI Features
