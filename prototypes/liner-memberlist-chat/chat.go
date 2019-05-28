@@ -7,7 +7,7 @@ import (
 	"net"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-chat/chat-member"
+	"github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-memberlist-chat/chat-member"
 )
 
 var (
