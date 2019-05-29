@@ -12,11 +12,11 @@ According to the chapters of the thesis "Programming Reactive Systems in Go" we 
 
 
 
-|Name                 |Chat Server      |Bootstrap               |Commands|Protocol Buffers|'TUI'|'liner'|'memberlist'|'libp2p'|
-|:---:                |:---:            |:---:                   |:---:   |:---:           |:---:|:---:  |:---:       |:---:   |
-|gRPC-chat            |First application|Well-known address      |-       |Yes             |Yes  |-      |-           |-       |
-|protobuf-tcp-chat    |First application|Well-known address      |Yes     |Yes             |Yes  |-      |-           |-       |
-|protobuf-udp-chat    |First application|Well-known address      |Yes     |Yes             |Yes  |-      |-           |-       |
-|cf-chat              |-                |Cloud Functions         |Yes     |Yes             |Yes  |-      |-           |-       |
-|liner-memberlist-chat|-                |Cloud Functions         |Yes     |Yes             |-    |Yes    |Yes         |-       |
-|libp2p-chat          |-                |Official bootstrap peers|Yes     | -              |-    |-      |-           |Yes     |
+|     |Name                 |Chat Server      |Bootstrap               |Commands|Protocol Buffers|'TUI'|'liner'|'memberlist'|'libp2p'|
+|:---:|:---:                |:---:            |:---:                   |:---:   |:---:           |:---:|:---:  |:---:       |:---:   |
+|5.1.|gRPC-chat            |First application|Well-known address      |-       |Yes             |Yes  |-      |-           |-       |
+|5.2.|protobuf-tcp-chat    |First application|Well-known address      |Yes     |Yes             |Yes  |-      |-           |-       |
+|5.2.|protobuf-udp-chat    |First application|Well-known address      |Yes     |Yes             |Yes  |-      |-           |-       |
+|5.3.|cf-chat              |-                |Cloud Functions         |Yes     |Yes             |Yes  |-      |-           |-       |
+|5.4.|liner-memberlist-chat|-                |Cloud Functions         |Yes     |Yes             |-    |Yes    |Yes         |-       |
+|5.5.|libp2p-chat          |-                |Official bootstrap peers|Yes     | -              |-    |-      |-           |Yes     |
