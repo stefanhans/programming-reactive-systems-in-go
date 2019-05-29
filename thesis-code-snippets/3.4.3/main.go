@@ -61,9 +61,9 @@ func executeShellScript(cmdline string) bool {
 }
 
 func main() {
-	s := liner.NewLiner()
-	s.SetTabCompletionStyle(liner.TabPrints)
-	s.SetCompleter(func(line string) (ret []string) {
+	state := liner.NewLiner()
+	state.SetTabCompletionStyle(liner.TabPrints)
+	state.SetCompleter(func(line string) (ret []string) {
 		for _, c := range commands {
 			if strings.HasPrefix(c, line) {
 				ret = append(ret, c)
@@ -71,10 +71,10 @@ func main() {
 		}
 		return
 	})
-	defer s.Close()
+	defer state.Close()
 
 	for {
-		p, err := s.Prompt(prompt())
+		p, err := state.Prompt(prompt())
 		if err == io.EOF {
 			return
 		}
@@ -82,7 +82,7 @@ func main() {
 			panic(err)
 		}
 		if executeShellScript(p) {
-			s.AppendHistory(p)
+			state.AppendHistory(p)
 		}
 	}
 }
