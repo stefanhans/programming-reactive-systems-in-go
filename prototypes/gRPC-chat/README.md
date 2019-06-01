@@ -16,7 +16,8 @@ Write your message and send it by the return key.
 
 ### Features
 
-It informs about joining and leaving and writes a logfile.
+- informs about joining and leaving members
+- writes a logfile.
 
 ### Message Types and Services
 
