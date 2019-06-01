@@ -51,3 +51,5 @@ service Displayer {
     rpc DisplayUnsubscription(Member) returns (Member) {}
 }
 ```
+
+The first client starts the service, i.e., the Publisher, which handles all messages and subscriptions.
