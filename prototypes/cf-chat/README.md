@@ -21,3 +21,25 @@ Then, the client informs all old members about itself joined.
 - reactive bootstrap service instead of well-known address for central client publisher
 - every member knows all other members to avoid single point of failure
 
+
+### Internal Commands
+
+GCP's bootstrap service API:
+               
+- \gcp shows all GCP data, i.e., regarding bootstrap service           
+- \gcpconfig shows GCP configuration     
+- \gcpsubscribe subscribes this member to bootstrap service     
+- \gcpunsubscribe unsubscribes this member from bootstrap service
+- \gcplist shows all members from bootstrap service
+- \gcpreset resets the bootstrap service
+  
+Application commands:
+
+- \all shows complete data               
+- \chat shows all chat data        
+- \list shows list of chat members        
+- \self shows data of this member            
+- \message shows message object 
+- \types lists all possible message types         
+- \logfile shows log file of this member
+- \quit quits the application
