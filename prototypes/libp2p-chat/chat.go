@@ -21,18 +21,12 @@ import (
 	"github.com/multiformats/go-multihash"
 )
 
-// IPFS bootstrap nodes. Used to find other peers in the network.
-var bootstrapPeers = []string{
-	"/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
-	"/ip4/104.236.179.241/tcp/4001/ipfs/QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM",
-	"/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64",
-	"/ip4/128.199.219.111/tcp/4001/ipfs/QmSoLSafTMBsPKadTEgaXctDQVcqN88CNLHXMkTNwMKPnu",
-	"/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd",
-}
-
 var (
 	// Should be set most uniquely, i.e. ./chat -r $(cat uuid.txt)
 	rendezvous string
+
+	// IPFS bootstrap nodes. Used to find other peers in the network
+	bootstrapPeers []string
 
 	// Reader and writer regarding the streams and the chat, respectively
 	readWriters []*bufio.ReadWriter
@@ -380,13 +374,29 @@ func writeData() {
 func main() {
 	help := flag.Bool("h", false, "Display Help")
 	rendezvousString := flag.String("r", "", "Unique string to identify group of nodes. Share this with your friends to let them connect with you")
+	bootstrapPeer := flag.String("b", "", "Address of bootstrap peer, <multiaddr>/<peerID>")
 	flag.Parse()
 
 	rendezvous = *rendezvousString
 
+	if len(*bootstrapPeer) > 0 {
+		bootstrapPeers = []string{
+			*bootstrapPeer,
+		}
+		fmt.Printf("bootstrapPeers: %v\n", bootstrapPeers)
+	} else {
+		bootstrapPeers = []string{
+			"/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+			"/ip4/104.236.179.241/tcp/4001/ipfs/QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM",
+			"/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64",
+			"/ip4/128.199.219.111/tcp/4001/ipfs/QmSoLSafTMBsPKadTEgaXctDQVcqN88CNLHXMkTNwMKPnu",
+			"/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd",
+		}
+	}
+
 	if *help {
 		fmt.Printf("This program demonstrates a simple p2p chat application using libp2p\n\n")
-		fmt.Printf("Usage: Run './chat in two different terminals. Let them connect to the bootstrap nodes, announce themselves and connect to the peers\n")
+		fmt.Printf("Usage: Run './libp2p-chat in two different terminals. Let them connect to the bootstrap nodes, announce themselves and connect to the peers\n")
 
 		os.Exit(0)
 	}
@@ -505,13 +515,3 @@ func main() {
 	// Keep the chat running
 	select {}
 }
-
-/*
-
-# Initially
-go build chat.go && uuidgen > uuid.txt && ./chat -r $(cat uuid.txt)
-
-# Next chats
-./chat -r $(cat uuid.txt)
-
-*/
