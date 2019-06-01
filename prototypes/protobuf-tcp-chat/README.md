@@ -1,6 +1,7 @@
 # Chat Using Protocol Buffers Via TCP
 
-This prototype uses [Protocol Buffer](https://developers.google.com/protocol-buffers/docs/gotutorial). It is the first prototype with interactive commands.
+This prototype uses [Protocol Buffer](https://developers.google.com/protocol-buffers/docs/gotutorial). 
+It is the first prototype with interactive commands.
 
 
 Before we see some details, let's do `go build` and run it in three terminals as follows:
