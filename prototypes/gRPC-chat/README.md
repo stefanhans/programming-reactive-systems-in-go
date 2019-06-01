@@ -1,7 +1,6 @@
 # Chat Using Protocol Buffers And gRPC
 
-This prototype uses [Protocol Buffer](https://developers.google.com/protocol-buffers/docs/gotutorial) in combination with [gRPC](https://grpc.io/docs/quickstart/go/).
-
+This prototype uses [Protocol Buffer](https://developers.google.com/protocol-buffers/docs/gotutorial) in combination with [gRPC](https://grpc.io/docs/quickstart/go/). It was the first prototype we had designed.
 
 Before we see some details, let's do `go build` and run it in three terminals as follows:
 
