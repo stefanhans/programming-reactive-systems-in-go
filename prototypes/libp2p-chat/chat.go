@@ -167,20 +167,17 @@ func chatConNum(arguments []string) {
 // chatPeer shows data of a specified peer
 func chatPeer(arguments []string) {
 
-	// Check at least two words exists
-	if len(arguments) < 2 {
-		fmt.Printf("ERROR: wrong format: e.g. %q\n", "<peer.ID Qm*YDJjDm>")
-		return
-	}
+	var pIn string
 
-	// Join the two words of peer ID
-	pIn := strings.Join(arguments[:2], " ")
+	if len(arguments) > 0 {
+		pIn = arguments[0]
+	}
 
 	// Loop over all peers from the store of the chat
 	for _, p := range chat.Peerstore().Peers() {
 
-		// Search the given ID and print accordingly
-		if p.String() == pIn {
+		// Search the given ID or all, and print accordingly
+		if p.String() == pIn || pIn == "" {
 			fmt.Printf("<ID>: %s\n", p)
 			fmt.Printf("<ID>: %s\n", p.Pretty())
 			for i, pAddr := range chat.Peerstore().Addrs(p) {

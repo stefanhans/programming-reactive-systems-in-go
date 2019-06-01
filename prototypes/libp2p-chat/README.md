@@ -1,8 +1,20 @@
-# p2p chat app with libp2p [support peer discovery]
+# Pre-Chat Using 'libp2p'
 
-This program demonstrates a simple p2p chat application. You will learn how to discover a peer in the network (using kad-dht), connect to it and open a chat stream. 
+This prototype uses various packages from projects of [Protocol Labs](https://protocol.ai):
 
-## How to build this example?
+- [ipfs/go-cid](https://github.com/ipfs/go-cid)
+- [ipfs/go-ipfs-addr](https://github.com/ipfs/go-ipfs-addr)
+- [libp2p/go-libp2p](https://github.com/libp2p/go-libp2p)
+- [libp2p/go-libp2p-host](https://github.com/libp2p/go-libp2p-host)
+- [libp2p/go-libp2p-kad-dht](https://github.com/libp2p/go-libp2p-kad-dht)
+- [libp2p/go-libp2p-net](https://github.com/libp2p/go-libp2p-net)
+- [libp2p/go-libp2p-peer](https://github.com/libp2p/go-libp2p-peer)
+- [libp2p/go-libp2p-peerstore](https://github.com/libp2p/go-libp2p-peerstore)
+- [multiformats/go-multihash](https://github.com/multiformats/go-multihash)
+
+It is inspired by [chat-with-rendezvous](https://github.com/libp2p/go-libp2p-examples/tree/master/chat-with-rendezvous)
+
+### Get and build
 
 ```
 go get github.com/programming-reactive-systems-in-go/prototypes/libp2p
@@ -10,123 +22,72 @@ go get github.com/programming-reactive-systems-in-go/prototypes/libp2p
 go build chat.go
 ```
 
-## Usage
-
-Use two different terminal windows to run
+### Usage
 
 ```
-./chat
-```
-## So how does it work?
-
-1. **Start a p2p host**
-```go
-ctx := context.Background()
-
-// libp2p.New constructs a new libp2p Host.
-// Other options can be added here.
-host, err := libp2p.New(ctx)
-```
-[libp2p.New](https://godoc.org/github.com/libp2p/go-libp2p#New) is the constructor for libp2p node. It creates a host with given configuration. Right now, all the options are default, documented [here](https://godoc.org/github.com/libp2p/go-libp2p#New)
-
-2. **Set a default handler function for incoming connections.**
-
-This function is called on the local peer when a remote peer initiate a connection and starts a stream with the local peer.
-```go
-// Set a function as stream handler.
-host.SetStreamHandler("/chat/1.1.0", handleStream)
+Usage of ./chat:
+  -b string
+    	Address of bootstrap peer, <multiaddr>/<peerID>
+  -r string
+    	Unique string to identify group of nodes. Share this with your friends to let them connect with you
 ```
 
-```handleStream``` is executed for each new stream incoming to the local peer. ```stream``` is used to exchange data between local and remote peer. This example uses non blocking functions for reading and writing from this stream.
+### Start it with a unique identifier and default bootstrap peers
 
-```go
-func handleStream(stream net.Stream) {
+Create a new uuid, e.g. by uuidgen
 
-    // Create a buffer stream for non blocking read and write.
-    rw := bufio.NewReadWriter(bufio.NewReader(stream), bufio.NewWriter(stream))
-
-    go readData(rw)
-    go writeData(rw)
-
-    // 'stream' will stay open until you close it (or the other side closes it).
-}
+```
+uuidgen > uuid.txt
 ```
 
-3. **Initiate a new DHT Client with ```host``` as local peer.**
+<br> Use different terminal windows to run
 
-
-```go
-dht, err := dht.New(ctx, host)
+```
+./chat -r $(cat uuid.txt)
 ```
 
-4. **Connect to IPFS bootstrap nodes.**
+### Start it with your bootstrap peer
 
-These nodes are used to find nearby peers using DHT.
+[Install IPFS](https://docs.ipfs.io/introduction/usage/#install-ipfs) if needed.
 
-```go
-for _, addr := range bootstrapPeers {
+Stop the daemon, if running.
 
-    iaddr, _ := ipfsaddr.ParseString(addr)
-
-    peerinfo, _ := peerstore.InfoFromP2pAddr(iaddr.Multiaddr())
-
-    if err := host.Connect(ctx, *peerinfo); err != nil {
-        fmt.Println(err)
-    } else {
-        fmt.Println("Connection established with bootstrap node: ", *peerinfo)
-    }
-}
+```
+ipfs shutdown
 ```
 
-5. **Announce your presence using a rendezvous point.**
+<br> Remove all bootstrap peers and start the daemon.
 
-[dht.Provide](https://godoc.org/github.com/libp2p/go-libp2p-kad-dht#IpfsDHT.Provide) makes this node announce that it can provide a value for the given key. Where a key in this case is ```rendezvousPoint```. Other peers will hit the same key to find other peers.
-
-```go
-if err := dht.Provide(tctx, rendezvousPoint, true); err != nil {
-    panic(err)
-}
+```
+ipfs bootstrap rm all
+ipfs daemon &
 ```
 
-6. **Find peers nearby.**
+<br> Choose peer address for private network.
 
-[dht.FindProviders](https://godoc.org/github.com/libp2p/go-libp2p-kad-dht#IpfsDHT.FindProviders) will return all the peers who have announced their presence before.
-
-```go
-peers, err := dht.FindProviders(tctx, rendezvousPoint)
+```
+ipfs id -f="<addrs>\n"
 ```
 
-**Note:** Although [dht.Provide](https://godoc.org/github.com/libp2p/go-libp2p-kad-dht#IpfsDHT.Provide) and [dht.FindProviders](https://godoc.org/github.com/libp2p/go-libp2p-kad-dht#IpfsDHT.FindProviders) works for a rendezvous peer discovery, this is not the right way of doing it. Libp2p is currently working on an actual rendezvous protocol ([libp2p/specs#56](https://github.com/libp2p/specs/pull/56)) which can be used for bootstrap purposes, real time peer discovery and application specific routing.
+<br> Create a new uuid.
 
-7. **Open streams to peers found.**
-
-Finally we open stream to the peers we found.
-
-```go
-for _, p := range peers {
-
-    if p.ID == host.ID() || len(p.Addrs) == 0 {
-        // No sense connecting to ourselves or if addrs are not available
-        continue
-    }
-
-    stream, err := host.NewStream(ctx, p.ID, "/chat/1.1.0")
-
-    if err != nil {
-        fmt.Println(err)
-    } else {
-        rw := bufio.NewReadWriter(bufio.NewReader(stream), bufio.NewWriter(stream))
-
-        go writeData(rw)
-        go readData(rw)
-    }
-
-    fmt.Println("Connected to: ", p)
-}
+```
+uuidgen > uuid.txt
 ```
 
-## Authors
-1. Abhishek Upperwal
-2. Mantas Vidutis
+<br> Start the application, e.g. on localhost.
 
-Customized by Stefan Hans
+```
+./chat -r $(cat uuid.txt) -b $(ipfs id -f="<addrs>\n" | grep 127.0.0.1/tcp/4001)
+```
+
+### Internal commands
+
+```
+<CMD USAGE>: \rendezvous
+<CMD USAGE>: \chat
+<CMD USAGE>: \con
+<CMD USAGE>: \peer <peer.ID Qm*...>
+<CMD USAGE>: \addpeer <peer.ID Qm*...>
+<CMD USAGE>: \quit
+```
