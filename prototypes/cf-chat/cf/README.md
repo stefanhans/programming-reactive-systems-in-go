@@ -1,8 +1,7 @@
-### Google Cloud Platform's Cloud Functions
+### Cloud Functions As List Of Members Service
 
-Using the Google Cloud Functions Go 1.11 Alpha, I have implemented a simple service with Google Firestore.
-
-Currently, you need to register for [early access](https://docs.google.com/forms/d/e/1FAIpQLSfJ08R2z7FumQyYGGuTyK4x5M-6ch7WmJ_3uWYI5SdZUb5SBw/viewform).
+Using the Google Cloud Functions ([Go 1.11.5 runtime](https://cloud.google.com/functions/docs/concepts/go-runtime)), 
+I have implemented a simple list of members service with [Google Firestore](https://cloud.google.com/firestore/docs/).
 
 After preparing the environment, we start setting some environment variables:
 
@@ -25,8 +24,6 @@ gcloud alpha functions deploy subscribe --region $GCP_REGION --entry-point Subsc
 gcloud alpha functions deploy list --region $GCP_REGION --entry-point List --runtime go111 --trigger-http
 gcloud alpha functions deploy unsubscribe --region $GCP_REGION --entry-point Unsubscribe --runtime go111 --trigger-http
 gcloud alpha functions deploy reset --region $GCP_REGION --entry-point Reset --runtime go111 --trigger-http
-
-
 ```
 
 Using the URL from the deployment, we test the functions:
