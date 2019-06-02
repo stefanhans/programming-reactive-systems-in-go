@@ -12,11 +12,11 @@ According to the chapters of the thesis "Programming Reactive Systems in Go" we 
 
 
 
-|Name                 |Chat Server      |Bootstrap               |Commands|Protocol Buffers|'TUI'|'liner'|'memberlist'|'libp2p'|
-|:---:                |:---:            |:---:                   |:---:   |:---:           |:---:|:---:  |:---:       |:---:   |
-|gRPC-chat            |First client|Well-known address      |-       |Yes             |Yes  |-      |-           |-       |
-|protobuf-tcp-chat    |First client|Well-known address      |Yes     |Yes             |Yes  |-      |-           |-       |
-|protobuf-udp-chat    |First client|Well-known address      |Yes     |Yes             |Yes  |-      |-           |-       |
-|cf-chat              |-                |Cloud Functions         |Yes     |Yes             |Yes  |-      |-           |-       |
-|liner-memberlist-chat|-                |Cloud Functions         |Yes     |Yes             |-    |Yes    |Yes         |-       |
-|libp2p-chat          |-                |Official bootstrap peers|Yes     | -              |-    |-      |-           |Yes     |
+|Name                 |Chat Server |Membership     |Bootstrap               |Commands|Protocol Buffers|UI     |
+|:---:                |:---:       |:---:          |:---:                   |:---:   |:---:           |:---:  |
+|gRPC-chat            |First client|-              |Well-known address      |-       |Yes             |'TUI'  |
+|protobuf-tcp-chat    |First client|-              |Well-known address      |Yes     |Yes             |'TUI'  |
+|protobuf-udp-chat    |First client|-              |Well-known address      |Yes     |Yes             |'TUI'  |
+|cf-chat              |-           |Cloud Functions|Cloud Functions         |Yes     |Yes             |'TUI'  |
+|liner-memberlist-chat|-           |'memberlist'   |Cloud Functions         |Yes     |Yes             |'liner'|
+|libp2p-chat          |-           |'libp2p'       |Official bootstrap peers|Yes     | -              |'TUI'  |
