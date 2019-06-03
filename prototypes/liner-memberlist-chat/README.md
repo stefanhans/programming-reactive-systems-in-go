@@ -1,102 +1,75 @@
 # Pre-Chat Using 'memberlist'
 
-This prototype uses 
+This prototype uses the following external libraries:
 
-- HashiCorp's ['memberlist'](https://github.com/hashicorp/memberlist) - a SWIM++ protocol implementation
-- ['liner'](https://github.com/peterh/liner) - a pure Go line editor with history
+- HashiCorp's [`memberlist`](https://github.com/hashicorp/memberlist) - a SWIM++ protocol implementation
+- [`liner`](https://github.com/peterh/liner) - a pure Go line editor with history
 
 It is the first prototype who uses a bootstrap service and can act on unexpected network failure.
+### Configure The Bootstrap Service
 
-### Bootstrap Service With API
+A member joins via bootstrap service. The service adds the new peer, if not enough peers stored already, 
+and returns the list in any case. The bootstrap peers are entry points to join the `memberlist`.
 
-We have three parts:
+The bootstrap service has two implementations:
 
-- bootstrap-data-api
-- bootstrap-data-server
-- bootstrap-data-cloudfunctions
-- 
+- [bootstrap-data-server](https://github.com/stefanhans/programming-reactive-systems-in-go/tree/master/prototypes/liner-memberlist-chat/bootstrap-data-server)
+is an implementation as HTTP server e.g. running on localhost for development
+- [bootstrap-data-cloudfunctions](https://github.com/stefanhans/programming-reactive-systems-in-go/tree/master/prototypes/liner-memberlist-chat/bootstrap-data-cloudfunctions)
+is an implementation deployed as Google Cloud Functions
 
-- [bootstrap service](https://github.com/stefanhans/programming-reactive-systems-in-go/tree/master/prototypes/cf-chat/cf)
-- [client's API of the bootstrap service](https://github.com/stefanhans/programming-reactive-systems-in-go/tree/master/prototypes/cf-chat/memberlist)
-- [chat with internal commands](https://github.com/stefanhans/programming-reactive-systems-in-go/tree/master/prototypes/cf-chat/chat)
+The [bootstrap-data-api](https://github.com/stefanhans/programming-reactive-systems-in-go/tree/master/prototypes/liner-memberlist-chat/bootstrap-data-api)
+completes the service. 
 
-A member joins via the list of members service, which adds the new member and returns the actualized list.
-Then, the client informs all old members about itself joined.
+Execute `. .bootstrap-switch` to switch between both implementations. In case you use the server, you have to start the server manually as described [here](https://github.com/stefanhans/programming-reactive-systems-in-go/tree/master/prototypes/liner-memberlist-chat/bootstrap-data-server).
 
+### Run The Application
 
-
-
-
-Before we see some details, let's do `go build` and run it in three terminals as follows:
+After choosing the bootstrap service implementation, let's do `go build` and run it in three terminals as follows - 
+do not forget to execute `. .bootstrap-switch` in every terminal appropriately:
 
 ```
-export BOOTSTRAP_DATA_SERVER="https://europe-west1-bootstrap-data-cloudfunctions.cloudfunctions.net"
-
 ./liner-memberlist-chat alice
 ```
 
 ```
-export BOOTSTRAP_DATA_SERVER="https://europe-west1-bootstrap-data-cloudfunctions.cloudfunctions.net"
-
 ./liner-memberlist-chat bob
 ```
 
 ```
-export BOOTSTRAP_DATA_SERVER="https://europe-west1-bootstrap-data-cloudfunctions.cloudfunctions.net"
-
 ./liner-memberlist-chat charly
 ```
 
-Write your message and send it by the return key.
+### UI And Internal Commands
 
-### Features
+The started application returns an internal prompt and has not much initialization done. The inner command line 
+provides command completion and history.
 
-- informs about joining and leaving members
-- writes a log file
-- set of internal commands, to which you can add new commands quickly
-- every member knows all other members to avoid central client publisher as a single point of failure
-- reactive service instead of well-known address of central client publisher
-
-For more details, please see the subdirectories.
-
-
-### Message Types and Services
+Type `<Tab><Tab>` to see all commands. 
 
 ```
-message Member {
-    string name = 1;
-    string ip = 2;
-    string port = 3;
-}
-
-message MemberList {
-    repeated Member member = 1;
-}
-
-message Message {
-    Member  sender = 1;
-    string  text = 2;
-}
-
-// Service definition for gRPC plugin to publish messages and handle subscriptions
-service Publisher {
-    rpc Subscribe(Member) returns (Member) {}
-    rpc Unsubscribe(Member) returns (Member) {}
-    rpc Publish(Message) returns (MemberList) {}
-}
-
-// Service definition for gRPC plugin to display messages
-service Displayer {
-    rpc DisplayText(Message) returns (Message) {}
-    rpc DisplaySubscription(Member) returns (Member) {}
-    rpc DisplayUnsubscription(Member) returns (Member) {}
-}
+bootstrapjoin               memberlistconfigure
+bootstrapleave              memberlistcreate
+bootstraplist               memberlistdelete
+bootstraplistlocal          memberlisthealthscore
+bootstraprefill             memberlistjoin
+bootstrapreset              memberlistleave
+broadcastadd                memberlistshutdown
+broadcastdel                memberlistshutdowntransport
+broadcastlist               memberliststart
+chatjoin                    memberlistupdate
+chatleave                   msg
+chatmemberlist              ping
+chatmemberping              play
+echo                        quit
+execute                     saveconfig
+loadconfig                  showconfig
+localnode                   showmemberlist
+log                         sleep
+memberlist
 ```
 
-The first client starts the service, i.e., the Publisher, which handles all messages and subscriptions.
-
-
-
+### Start The Chat Manually
 
 **Create your memberlist node**
 
@@ -128,5 +101,24 @@ The first client starts the service, i.e., the Publisher, which handles all mess
 - `memberlistshutdown`
 - `bootstrapleave` 
 - `quit`
+
+
+### Start The Chat Via Internal Script
+
+If you want to start the chat, you can use `execute chat.txt`, and every line of `chat.txt` is executed one by one:
+
+```
+memberlistconfigure
+memberlistcreate
+bootstrapjoin
+memberliststart
+memberlistjoin
+chatjoin
+chatmemberlist
+sleep 1
+msg hello
+```
+
+
 
 
