@@ -27,8 +27,9 @@ type Peer struct {
 // Config has the configuration of the bootstrap service.
 type Config struct {
 	MaxPeers int `json:"maxpeers,omitempty"` // Max number of bootstrap peers to be saved
-	MinPeers int `json:"minpeers,omitempty"` // Min number of bootstrap peers, i.e. triggers refill
-	NumPeers int `json:"numpeers,omitempty"` // Number of bootstrap peers
+	//MinPeers int `json:"minpeers,omitempty"` // Min number of bootstrap peers, i.e. triggers refill
+	MinRefillCandidates int `json:"minrefillcandidates,omitempty"` // Number used to decide peer send refill request
+	NumPeers            int `json:"numpeers,omitempty"`            // Number of bootstrap peers
 }
 
 // BootstrapData is the complete data structure
@@ -254,7 +255,7 @@ func (api *BootstrapDataAPI) UpdateConfig() (*BootstrapData, error) {
 	res, err := http.Post(api.ServiceUrl+"/config",
 		"application/x-www-form-urlencoded",
 		strings.NewReader(fmt.Sprintf("%d %d",
-			api.BootstrapData.Config.MaxPeers, api.BootstrapData.Config.MinPeers)))
+			api.BootstrapData.Config.MaxPeers, api.BootstrapData.Config.MinRefillCandidates)))
 	if err != nil {
 		return nil, fmt.Errorf("failed to config bootstrap data: %v", err)
 	}

@@ -72,7 +72,7 @@ We test the API against two different backend services:
 Start the webserver:
 
 ```
-cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-server
+cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-memberlist-chat/bootstrap-data-server
 
 go build
 ./bootstrap-data-server
@@ -81,7 +81,7 @@ go build
 Now, execute the following tests:
 
 ```
-cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api
+cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-memberlist-chat/bootstrap-data-api
 
 export BOOTSTRAP_DATA_SERVER="http://localhost:8080"
 go test -run TestLocalhost
@@ -90,11 +90,11 @@ go test -run TestLocalhost
 #### GCP Cloud Functions
 
 ```
-cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/bootstrap-data-api
+cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-memberlist-chat/bootstrap-data-api
 
 export BOOTSTRAP_DATA_SERVER="https://europe-west1-bootstrap-data-cloudfunctions.cloudfunctions.net"
 go test -run TestCf
 ```
 
 The cloud functions are already deployed. Nevertheless, you find the source code with instructions on how to deploy 
-onto the Google Cloud Platform in `bootstrap-data-cloud-functions`.
+onto the Google Cloud Platform in `bootstrap-data-cloudfunctions`.

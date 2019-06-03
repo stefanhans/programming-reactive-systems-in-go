@@ -124,7 +124,7 @@ curl -s $GCP_SERVICE_URL/list
 **Test Cloud Functions API**
 
 ```
-cd ~/go/src/github.com/stefanhans/cli-chat/bootstrap-data-api
+cd ~/go/src/github.com/stefanhans/programming-reactive-systems-in-go/prototypes/liner-memberlist-chat/bootstrap-data-api
 
 export BOOTSTRAP_DATA_SERVER="https://europe-west1-bootstrap-data-cloudfunctions.cloudfunctions.net"
 go test -run TestCf
