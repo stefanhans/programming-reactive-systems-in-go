@@ -388,16 +388,4 @@ func cmdLogging(arguments []string) {
 
 func play(arguments []string) {
 
-	conn, err := net.Dial("tcp", chatMembers[arguments[0]].Sender)
-	if err != nil {
-		fmt.Printf("could not dial to %v: %v\n", chatMembers[arguments[0]].Sender, err)
-		return
-	}
-	// send message
-	fmt.Fprintf(conn, "")
-	// close connection
-	conn.Close()
-
-	//fmt.Printf("chatStop: %v\n", chatStop)
-
 }
