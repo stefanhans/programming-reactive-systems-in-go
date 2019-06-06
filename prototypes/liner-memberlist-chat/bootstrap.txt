@@ -1,0 +1,3 @@
+memberlistconfigure
+memberlistcreate
+bootstrapjoin
