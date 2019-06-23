@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/stefanhans/programming-reactive-systems-in-go/thesis-code-snippets/4.3.1/info-pb"
+	"github.com/stefanhans/programming-reactive-systems-in-go/thesis-code-snippets/3.4.1/info-pb"
 )
 
 func main() {

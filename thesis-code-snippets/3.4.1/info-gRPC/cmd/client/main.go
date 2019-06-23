@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/stefanhans/programming-reactive-systems-in-go/thesis-code-snippets/4.3.1/info-gRPC/info"
+	"github.com/stefanhans/programming-reactive-systems-in-go/thesis-code-snippets/3.4.1/info-gRPC/info"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
