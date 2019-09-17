@@ -1,18 +1,7 @@
 {
   "Config": {
     "maxpeers": 2,
-    "minrefillcandidates": 2,
-    "numpeers": 1
+    "minrefillcandidates": 2
   },
-  "Peers": {
-    "b5567de9-e8f8-41bb-961a-14d891c00883": {
-      "id": "b5567de9-e8f8-41bb-961a-14d891c00883",
-      "name": "Stefans-MBP-alice-4c29f3ea-7c99-11e9-a716-acde48001122",
-      "ip": "127.0.0.1",
-      "port": "58938",
-      "protocol": "tcp",
-      "status": "0",
-      "timestamp": "1558533427"
-    }
-  }
+  "Peers": {}
 }
